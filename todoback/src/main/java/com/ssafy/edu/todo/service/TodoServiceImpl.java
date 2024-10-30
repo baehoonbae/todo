@@ -23,19 +23,19 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public int insertTodo(Todo todo) {
+    public boolean insertTodo(Todo todo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insertTodo'");
     }
 
     @Override
-    public int updateTodo(Todo todo) {
+    public boolean updateTodo(Todo todo) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateTodo'");
     }
 
     @Override
-    public int deleteTodo(int todoId) {
+    public boolean deleteTodo(int todoId) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteTodo'");
     }

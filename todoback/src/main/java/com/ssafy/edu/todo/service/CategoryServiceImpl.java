@@ -3,41 +3,51 @@ package com.ssafy.edu.todo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.edu.todo.mapper.CategoryMapper;
 import com.ssafy.edu.todo.model.Category;
+import com.ssafy.edu.todo.model.CategoryExample;
+import com.ssafy.edu.todo.model.CategoryExample.Criteria;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+    private final CategoryMapper cm;
+
+    @Autowired
+    public CategoryServiceImpl(CategoryMapper cm) {
+        this.cm = cm;
+    }
+
     @Override
     public Optional<List<Category>> getAllCategories(int userSeq) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllCategories'");
+        CategoryExample exam=new CategoryExample();
+        exam.setOrderByClause("id asc");
+        exam.createCriteria().andCategoryIdEqualTo(userSeq);
+        List<Category>list=cm.selectByExample(exam);
+        return Optional.ofNullable(list);
     }
 
     @Override
     public Optional<Category> getCategoryById(int categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCategoryById'");
+        return Optional.ofNullable(cm.selectByPrimaryKey(categoryId));
     }
 
     @Override
-    public int insertCategory(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertCategory'");
+    public boolean insertCategory(Category category) {
+        return cm.insertSelective(category) > 0;
     }
 
     @Override
-    public int updateCategory(Category category) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCategory'");
+    public boolean updateCategory(Category category) {
+        return cm.updateByPrimaryKey(category)>0;
     }
 
     @Override
-    public int deleteCategory(int categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCategory'");
+    public boolean deleteCategory(int categoryId) {
+        return cm.deleteByPrimaryKey(categoryId)>0;
     }
 
 }
