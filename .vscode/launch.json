@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TodobackApplication<todoback>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ssafy.edu.TodobackApplication",
+            "projectName": "todoback",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
