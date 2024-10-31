@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.edu.todo.mapper.UserMapper;
 import com.ssafy.edu.todo.model.User;
-import com.ssafy.edu.todo.requests.LoginRequest;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,9 +19,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> login(LoginRequest loginRequest) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'login'");
+    public Optional<User> login(User user) {
+        return Optional.ofNullable(um.selectUserByUserIdAndUserPassword(user));
     }
 
     @Override

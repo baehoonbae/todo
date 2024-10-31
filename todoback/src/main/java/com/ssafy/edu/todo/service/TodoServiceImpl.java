@@ -3,41 +3,45 @@ package com.ssafy.edu.todo.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.edu.todo.mapper.TodoMapper;
 import com.ssafy.edu.todo.model.Todo;
 
 @Service
 public class TodoServiceImpl implements TodoService {
 
+    private final TodoMapper todoMapper;
+
+    @Autowired
+    public TodoServiceImpl(TodoMapper todoMapper) {
+        this.todoMapper = todoMapper;
+    }
+
     @Override
     public Optional<List<Todo>> getAllTodoByCategoryId(int categoryId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllTodoByCategoryId'");
+        return Optional.ofNullable(todoMapper.selectTodoByCategoryId(categoryId));
     }
 
     @Override
     public Optional<Todo> getTodoById(int todoId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTodoById'");
+        return Optional.ofNullable(todoMapper.selectTodoById(todoId));
     }
 
     @Override
     public boolean insertTodo(Todo todo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insertTodo'");
-    }
-
-    @Override
-    public boolean updateTodo(Todo todo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateTodo'");
+        return todoMapper.insertSelective(todo)>0;
     }
 
     @Override
     public boolean deleteTodo(int todoId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteTodo'");
+        return todoMapper.deleteByPrimaryKey(todoId)>0;
+    }
+
+    @Override
+    public boolean updateTodo(Todo todo) {
+        return todoMapper.updateSelective(todo)>0;
     }
 
 }

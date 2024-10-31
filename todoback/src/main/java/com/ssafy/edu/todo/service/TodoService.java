@@ -10,5 +10,5 @@ public interface TodoService {
     public Optional<Todo> getTodoById(int todoId);
     public boolean insertTodo(Todo todo);
     public boolean updateTodo(Todo todo);
-    public boolean deleteTodo(int todoId);
+    public boolean deleteTodo(int id);
 }

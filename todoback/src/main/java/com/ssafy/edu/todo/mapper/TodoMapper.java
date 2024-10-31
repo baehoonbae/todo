@@ -104,5 +104,11 @@ public interface TodoMapper {
      *
      * @mbg.generated
      */
-    int updateByPrimaryKey(Todo row);
+     int updateByPrimaryKey(Todo row);
+     
+     List<Todo> selectTodoByCategoryId(int categoryId);
+
+    Todo selectTodoById(int todoId);
+    
+    int updateSelective(Todo todo);
 }

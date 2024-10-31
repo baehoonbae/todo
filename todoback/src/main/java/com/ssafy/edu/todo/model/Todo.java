@@ -15,8 +15,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Todo {
-    int id;
-    @NonNull int categoryId;
-    @NonNull String date;
-    @NonNull String content;
+    private Integer id;
+    private Integer categoryId;
+    @NonNull private String date;
+    @NonNull private String content;
 }

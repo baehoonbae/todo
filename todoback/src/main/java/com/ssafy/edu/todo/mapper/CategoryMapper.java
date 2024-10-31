@@ -108,4 +108,8 @@ public interface CategoryMapper {
     int updateByPrimaryKey(Category row);
 
     List<Category> selectAllCategoriesByUserSeq(int userSeq);
+
+    int updateCategory(Category category);
+
+    Category selectCategoryById(int id);
 }
