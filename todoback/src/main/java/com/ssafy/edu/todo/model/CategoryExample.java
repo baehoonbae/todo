@@ -116,7 +116,7 @@ public class CategoryExample {
      *
      * @mbg.generated
      */
-    public com.ssafy.edu.todo.model.TodoExample.Criteria createCriteria() {
+    public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
         if (oredCriteria.size() == 0) {
             oredCriteria.add(criteria);

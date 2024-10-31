@@ -106,4 +106,6 @@ public interface CategoryMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Category row);
+
+    List<Category> selectAllCategoriesByUserSeq(int userSeq);
 }

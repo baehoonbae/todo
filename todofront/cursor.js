@@ -100,7 +100,7 @@ const draw = () => {
 
     chain.forEach((link, index) => {
         if (isMouseMoving) {
-            ctx.drawImage(image, link.x - image.width / 2, link.y - image.height / 2, image.width, image.height);
+            ctx.drawImage(image, link.x - image.width / 2, link.y - image.height / 2, 30,30);
 
 
             if (index > 0) {
@@ -120,7 +120,7 @@ const draw = () => {
 
             link.x = lerp(link.x, mouse.x - (index + 1) * settings.minDistance, theta)
             link.y = lerp(link.y, mouse.y + Math.sin(time * .3 + index * .5) * 3, theta)
-            ctx.drawImage(image, link.x, link.y);
+            ctx.drawImage(image, link.x, link.y,30,30);
         }
     })
 }

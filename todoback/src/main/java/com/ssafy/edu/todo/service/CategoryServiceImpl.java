@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.edu.todo.mapper.CategoryMapper;
 import com.ssafy.edu.todo.model.Category;
-import com.ssafy.edu.todo.model.CategoryExample;
-import com.ssafy.edu.todo.model.CategoryExample.Criteria;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -23,10 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<List<Category>> getAllCategories(int userSeq) {
-        CategoryExample exam=new CategoryExample();
-        exam.setOrderByClause("id asc");
-        exam.createCriteria().andCategoryIdEqualTo(userSeq);
-        List<Category>list=cm.selectByExample(exam);
+        List<Category> list = cm.selectAllCategoriesByUserSeq(userSeq);
         return Optional.ofNullable(list);
     }
 
@@ -37,17 +32,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean insertCategory(Category category) {
-        return cm.insertSelective(category) > 0;
+        return cm.insert(category) > 0;
     }
 
     @Override
     public boolean updateCategory(Category category) {
-        return cm.updateByPrimaryKey(category)>0;
+        return cm.updateByPrimaryKey(category) > 0;
     }
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        return cm.deleteByPrimaryKey(categoryId)>0;
+        return cm.deleteByPrimaryKey(categoryId) > 0;
     }
 
 }

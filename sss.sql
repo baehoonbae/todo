@@ -1,5 +1,7 @@
 drop schema todo;
 
+create SCHEMA todo;
+
 use todo;
 
 -- user 테이블 생성
@@ -29,5 +31,8 @@ CREATE TABLE Todo (
 );
 
 select * from user;
+
 select * from category;
+
+
 select * from todo;
