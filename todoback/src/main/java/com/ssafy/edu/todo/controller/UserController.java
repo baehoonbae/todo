@@ -3,6 +3,7 @@ package com.ssafy.edu.todo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import com.ssafy.edu.todo.model.User;
 import com.ssafy.edu.todo.service.UserService;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/user")
 public class UserController {
     
