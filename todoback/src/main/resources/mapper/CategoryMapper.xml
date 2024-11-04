@@ -240,7 +240,15 @@
     </if>
   </select>
 
-  <select id="selectAllCategoriesByUserSeq" parameterType="int">
-    select id, user_seq, color, title from category where id=#{userSeq}
+  <select id="selectCategoryById" parameterType="int">
+    select id, user_seq userSeq, color, title from category where id=#{id}
   </select>
+
+  <select id="selectAllCategoriesByUserSeq" parameterType="int">
+    select id, user_seq userSeq, color, title from category where user_seq=#{userSeq}
+  </select>
+
+  <update id="updateCategory" parameterType="com.ssafy.edu.todo.model.Category">
+    update category set title=#{title}, color=#{color} where id=#{id}
+  </update>
 </mapper>

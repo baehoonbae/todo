@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> getCategoryById(int categoryId) {
-        return Optional.ofNullable(cm.selectByPrimaryKey(categoryId));
+        return Optional.ofNullable(cm.selectCategoryById(categoryId));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean updateCategory(Category category) {
-        return cm.updateByPrimaryKey(category) > 0;
+        return cm.updateCategory(category) > 0;
     }
 
     @Override

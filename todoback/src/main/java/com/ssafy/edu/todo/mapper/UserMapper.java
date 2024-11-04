@@ -105,4 +105,6 @@ public interface UserMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(User row);
+
+    User selectUserByUserIdAndUserPassword(User user);
 }
