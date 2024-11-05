@@ -1,23 +1,12 @@
 <template>
   <header>
-    <Header></Header>
-
-    <!-- <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <butten @click="toggleLink">
-          <RouterLink to="isCalenderOnly?'/onlyCalender':'/calenderAndCategory'">
-            {{ isCalenderOnly ? "달력만 표시" : "달력+카테고리" }}
-          </RouterLink>
-        </butten>
-        <RouterLink to="/login">로그인</RouterLink>
-        <RouterLink to="/join">회원가입</RouterLink>
-      </nav>
-    </div> -->
+    <Header @toggleCalendar="toggleCalendar"></Header>
   </header>
-  <HomeView></HomeView>
   <main>
-    <RouterView />
+    <HomeView />
+    <Transition name="calendar">
+      <BigCalendar v-if="isCalendarOpen" @close="closeCalendar" />
+    </Transition>
   </main>
 
   <footer>
@@ -31,11 +20,26 @@ import { ref } from "vue";
 import HomeView from "./views/HomeView.vue";
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+import BigCalendar from "./components/BigCalendar.vue";
 
-const isCalenderOnly = ref(true);
-const toggleLink = () => {
-  isCalenderOnly.value = !isCalenderOnly.value;
+const isCalendarOpen = ref(false);
+const toggleCalendar = () => {
+  isCalendarOpen.value = !isCalendarOpen.value;
+};
+
+const closeCalendar = () => {
+  isCalendarOpen.value = false;
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.calendar-enter-active,
+.calendar-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.calendar-enter-from,
+.calendar-leave-to {
+  opacity: 0;
+}
+</style>

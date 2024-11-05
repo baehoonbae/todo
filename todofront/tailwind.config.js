@@ -3,9 +3,13 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
-  ],  
+  ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }

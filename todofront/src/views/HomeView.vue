@@ -1,37 +1,19 @@
 <template>
-  <div class="container mx-auto px-4 max-w-3xl">
-
-    <div class="flex justify-center gap-20">
+  <div class="container mx-auto px-4 max-w-[950px]">
+    <div class="flex gap-20 mt-12">
       <!-- Left Calendar Section -->
-      <div class="w-72">
-        <!-- User Profile -->
-        <div class="flex items-center gap-2 mb-6">
-          <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
-          <span class="text-sm">me</span>
-          <div class="ml-auto">
-            <div class="w-6 h-6 text-blue-400 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" stroke-width="2"/>
-                <path d="M12 8v8M8 12h8" stroke-width="2"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-
+      <div class="w-[23.5rem]">
         <!-- Date and Stats -->
-        <div class="flex items-center gap-4 mb-6">
-          <span class="text-sm font-medium">2024년 11월</span>
+        <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
-            <span class="text-sm">👋 0</span>
-            <span class="text-sm">❤️ 0</span>
+            <span class="text-[0.9rem] pl-3">{{ currentYear }}년 {{ currentMonth }}월</span>
+            <span class="text-[0.9rem] text-gray-600">
+              ✓ 0 😊 0 ❤️ 0
+            </span>
           </div>
-        </div>
-
-        <!-- Calendar Navigation -->
-        <div class="flex justify-between items-center mb-4">
-          <div class="flex gap-4">
-            <button class="text-gray-400">&lt;</button>
-            <button class="text-gray-400">&gt;</button>
+          <div class="flex gap-2">
+            <button @click="previousMonth" class="text-gray-400">&lt;</button>
+            <button @click="nextMonth" class="text-gray-400">&gt;</button>
           </div>
         </div>
 
@@ -39,53 +21,106 @@
         <div class="mb-8">
           <!-- Weekdays -->
           <div class="grid grid-cols-7 mb-2">
-            <div class="text-center text-xs">월</div>
-            <div class="text-center text-xs">화</div>
-            <div class="text-center text-xs">수</div>
-            <div class="text-center text-xs">목</div>
-            <div class="text-center text-xs">금</div>
-            <div class="text-center text-xs text-blue-500">토</div>
-            <div class="text-center text-xs text-red-500">일</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center">월</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center">화</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center">수</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center">목</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center">금</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center text-blue-500">토</div>
+            <div class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center text-red-500">일</div>
           </div>
-
           <!-- Days -->
           <div class="grid grid-cols-7 gap-1">
-            <template v-for="i in 30" :key="i">
+            <!-- 빈 칸들 (월요일부터 시작) -->
+            <template v-for="empty in firstDayOfMonth" :key="'empty-'+empty">
+              <div class="aspect-square w-12 h-12"></div>
+            </template>
+
+            <!-- 1일부터 말일까지 -->
+            <template v-for="day in daysInMonth" :key="day">
               <div
-                class="aspect-square w-8 h-8 flex items-center justify-center rounded-full text-sm cursor-pointer"
+                class="aspect-square w-12 h-12 flex items-center justify-center rounded-full text-[0.8rem] cursor-pointer"
                 :class="{
-                  'bg-gray-100': i < 5,
-                  'bg-black text-white': i === 5,
-                  'hover:bg-gray-50': i > 5
-                }"
-              >
-                {{ i }}
+                  'hover:bg-gray-50': true,
+                  'bg-gray-200': isToday(day)
+                }" @click="selectDate(day)">
+                {{ day }}
               </div>
             </template>
           </div>
         </div>
       </div>
-
       <!-- Right Categories Section -->
-      <div class="w-48">
-        <div class="space-y-2">
-          <div v-for="(category, index) in ['카테고리 1', '카테고리 2', '카테고리 3', 'dfgdfgdfg']" 
-               :key="index"
-               class="flex items-center justify-between bg-gray-50 rounded-lg py-2 px-3 cursor-pointer hover:bg-gray-100">
+      <div class="w-40">
+        <div class="space-y-6">
+          <div v-for="(category, index) in ['카테고리 1', '카테고리 2', '카테고리 3', 'dfgdfgdfg']" :key="index"
+            class="flex items-center justify-between bg-gray-100 rounded-[20px] py-2 px-3 cursor-pointer hover:bg-gray-200">
             <div class="flex items-center gap-2">
               <span class="text-gray-400">🔒</span>
-              <span class="text-sm text-gray-600">{{ category }}</span>
+              <span class="text-sm text-gray-800 font-bold">{{ category }}</span>
             </div>
             <span class="text-gray-400">+</span>
           </div>
         </div>
       </div>
     </div>
-
-    
   </div>
 </template>
 
 <script setup>
-// 필요한 경우 여기에 추가 로직을 구현할 수 있습니다
+import { ref, computed } from 'vue'
+
+// 현재 날짜 상태 관리
+const currentDate = ref(new Date())
+const currentYear = computed(() => currentDate.value.getFullYear())
+const currentMonth = computed(() => currentDate.value.getMonth() + 1)
+
+// 해당 월의 첫 번째 날의 요일 구하기 (0: 일요일, 1: 월요일, ...)
+const firstDayOfMonth = computed(() => {
+  const firstDay = new Date(currentYear.value, currentMonth.value - 1, 1).getDay()
+  return firstDay === 0 ? 6 : firstDay - 1 // 월요일을 시작으로 조정
+})
+
+// 해당 월의 총 일수 구하기
+const daysInMonth = computed(() => {
+  return new Date(currentYear.value, currentMonth.value, 0).getDate()
+})
+
+// 토요일 체크
+const isSaturday = (day) => {
+  const date = new Date(currentYear.value, currentMonth.value - 1, day)
+  return date.getDay() === 6
+}
+
+// 일요일 체크
+const isSunday = (day) => {
+  const date = new Date(currentYear.value, currentMonth.value - 1, day)
+  return date.getDay() === 0
+}
+
+// 오늘 날짜 체크
+const isToday = (day) => {
+  const today = new Date()
+  return (
+    today.getDate() === day &&
+    today.getMonth() === currentDate.value.getMonth() &&
+    today.getFullYear() === currentDate.value.getFullYear()
+  )
+}
+
+// 이전 달로 이동
+const previousMonth = () => {
+  currentDate.value = new Date(currentYear.value, currentMonth.value - 2, 1)
+}
+
+// 다음 달로 이동
+const nextMonth = () => {
+  currentDate.value = new Date(currentYear.value, currentMonth.value, 1)
+}
+
+// 날짜 선택
+const selectDate = (day) => {
+  const selectedDate = new Date(currentYear.value, currentMonth.value - 1, day)
+  console.log('Selected date:', selectedDate)
+}
 </script>
