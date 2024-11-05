@@ -1,21 +1,18 @@
 package com.ssafy.edu.todo.controller;
 
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.CrossOrigin;
-=======
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
->>>>>>> c92173fd09ca9be06398d6a78dc0ea76ff36346c
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +22,7 @@ import com.ssafy.edu.todo.service.TodoService;
 // 모두 가져오기, 하나만 가져오기, 등록, 수정, 삭제, 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/todo")
+@RequestMapping("/api/todo")
 public class TodoController {
     private final TodoService todoService;
 
