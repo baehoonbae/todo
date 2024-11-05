@@ -7,17 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# 의존성 모듈
+node_modules/
+
+# 빌드 결과물
+dist/
+dist-ssr/
+
+# 시스템 파일
 .DS_Store
-dist
-dist-ssr
 coverage
 *.local
 
+# Cypress 테스트 결과
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
+# IDE/편집기 설정
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -27,12 +33,8 @@ coverage
 *.sln
 *.sw?
 
+# TypeScript
 *.tsbuildinfo
-
-# 기본적으로 모든 파일 무시하지 않음
-# node_modules와 dist 등 필요한 파일만 명시적으로 무시
-node_modules/
-dist/
 
 # 프로젝트 필수 파일들은 추적
 !src/
