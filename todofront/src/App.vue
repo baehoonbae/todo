@@ -1,45 +1,21 @@
 <template>
-  <header>
-    <Header @toggleCalendar="toggleCalendar"></Header>
+  <header v-if="!hideHeaderFooter">
+    <Header />
   </header>
   <main>
-    <HomeView />
-    <Transition name="calendar">
-      <BigCalendar v-if="isCalendarOpen" @close="closeCalendar" />
-    </Transition>
+    <RouterView/>
   </main>
-
-  <footer>
-    <Footer></Footer>
+  <footer v-if="!hideHeaderFooter">
+    <Footer />
   </footer>
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import { ref } from "vue";
-import HomeView from "./views/HomeView.vue";
-import Header from "./components/Header.vue";
+import { RouterView, useRoute, } from "vue-router";
+import {computed}from 'vue';
 import Footer from "./components/Footer.vue";
-import BigCalendar from "./components/BigCalendar.vue";
+import Header from "./components/Header.vue";
 
-const isCalendarOpen = ref(false);
-const toggleCalendar = () => {
-  isCalendarOpen.value = !isCalendarOpen.value;
-};
-
-const closeCalendar = () => {
-  isCalendarOpen.value = false;
-};
+const route = useRoute()
+const hideHeaderFooter = computed(() => route.meta.hideHeaderFooter)
 </script>
-
-<style scoped>
-.calendar-enter-active,
-.calendar-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.calendar-enter-from,
-.calendar-leave-to {
-  opacity: 0;
-}
-</style>

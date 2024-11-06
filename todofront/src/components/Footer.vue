@@ -2,7 +2,7 @@
 <template>
   <!-- Bottom Navigation -->
   <div class="fixed bottom-0 left-0 right-0">
-    <div class="flex justify-center gap-24 py-3 max-w-3xl mx-auto">
+    <div class="flex justify-center mb-2 gap-[95px] py-3 max-w-3xl mx-auto">
       <div class="flex flex-col items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"

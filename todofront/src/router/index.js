@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import TodoCalendar from '../components/TodoCalendar.vue';
+import TodoBigCalendar from '@/components/TodoBigCalendar.vue';
+import CategoryRegist from '@/views/CategoryRegist.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,9 +9,22 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: TodoCalendar
     },
-    
+    {
+      path: '/calendar',
+      name: 'calendar',
+      component: TodoBigCalendar
+    },
+    {
+      path:'/category',
+      name:'category',
+      component: CategoryRegist,
+      meta:{hideHeaderFooter:true},
+    },
+    {
+
+    },
   ]
 })
 

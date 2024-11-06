@@ -7,25 +7,55 @@
     </div>
     <!-- User Info Section -->
     <div class="flex gap-4">
-      <CalendarDaysIcon @click="toggleCalendar" class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black" />
+      <RouterLink v-if="isCalendarOpen" to="/">
+        <CalendarDaysIcon
+          @click="isCalendarOpen = !isCalendarOpen"
+          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
+        />
+      </RouterLink>
+      <RouterLink v-else to="/calendar">
+        <CalendarDaysIcon
+          @click="isCalendarOpen = !isCalendarOpen"
+          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
+        />
+      </RouterLink>
       <div class="relative">
-        <EllipsisHorizontalIcon @click="isDropdownOpen = !isDropdownOpen"
-          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black" />
+        <EllipsisHorizontalIcon
+          @click="isDropdownOpen = !isDropdownOpen"
+          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
+        />
         <Transition name="dropdown">
-          <div v-if="isDropdownOpen"
-            class="absolute right-0 mt-2 w-[155px] font-semibold bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)] py-2 z-50">
-            <a href="#" class="max-h-10 block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+          <div
+            v-if="isDropdownOpen"
+            class="absolute right-0 mt-2 w-[155px] font-semibold bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)] py-2 z-50"
+          >
+            <RouterLink
+              class="max-h-10 block px-4 text-sm text-gray-700 hover:bg-gray-100"
+              to="/category"
+            >
               <div class="flex justify-between items-center">
-                <span class="pb-1.5 text-center">카테고리 등록</span>
-                <span class="pb-2.5 text-blue-500 text-2xl">+</span>
+                <span class="text-center">카테고리 등록</span>
+                <span class="text-blue-500 text-2xl">+</span>
               </div>
-            </a>
+            </RouterLink>
             <div class="h-[1px] bg-gray-200"></div>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">카테고리 관리</a>
-            <div class="h-[1.5px] bg-gray-200"></div>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">루틴 관리</a>
-            <div class="h-[1.5px] bg-gray-200"></div>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">시간 알림</a>
+            <RouterLink
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              to=""
+              >카테고리 관리</RouterLink
+            >
+            <div class="h-[1px] bg-gray-200"></div>
+            <RouterLink
+              href="#"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >루틴 관리</RouterLink
+            >
+            <div class="h-[1px] bg-gray-200"></div>
+            <RouterLink
+              href="#"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >시간 알림</RouterLink
+            >
           </div>
         </Transition>
       </div>
@@ -34,34 +64,37 @@
 </template>
 
 <script setup>
-import { CalendarDaysIcon, EllipsisHorizontalIcon } from '@heroicons/vue/24/outline'
-import { onMounted, onUnmounted, ref } from 'vue'
-import BigCalendar from './BigCalendar.vue'
+import {
+  CalendarDaysIcon,
+  EllipsisHorizontalIcon,
+} from "@heroicons/vue/24/outline";
+import { onMounted, onUnmounted, ref } from "vue";
+import { RouterLink } from "vue-router";
 
-const isDropdownOpen = ref(false)
-const isCalendarOpen = ref(false)
+const isDropdownOpen = ref(false);
+const isCalendarOpen = ref(false);
 
 const toggleCalendar = () => {
-  isCalendarOpen.value = !isCalendarOpen.value
-}
+  isCalendarOpen.value = !isCalendarOpen.value;
+};
 
 // 드롭다운 외부 클릭 감지를 위한 이벤트 리스너
 const handleClickOutside = (event) => {
-  const dropdown = document.querySelector('.relative')
+  const dropdown = document.querySelector(".relative");
   if (dropdown && !dropdown.contains(event.target)) {
-    isDropdownOpen.value = false
+    isDropdownOpen.value = false;
   }
-}
+};
 
 // 컴포넌트가 마운트될 때 이벤트 리스너 추가
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
+  document.addEventListener("click", handleClickOutside);
+});
 
 // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <style scoped>

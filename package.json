@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@heroicons/vue": "^2.1.5"
+    "@heroicons/vue": "^2.1.5",
+    "axios": "^1.7.7"
   }
 }
