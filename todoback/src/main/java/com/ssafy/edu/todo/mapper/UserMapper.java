@@ -1,12 +1,14 @@
 package com.ssafy.edu.todo.mapper;
 
-import com.ssafy.edu.todo.model.User;
-import com.ssafy.edu.todo.model.UserExample;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+
+import com.ssafy.edu.todo.model.User;
+import com.ssafy.edu.todo.model.UserExample;
+import com.ssafy.edu.todo.requests.LoginRequest;
 
 @Mapper
 public interface UserMapper {
@@ -106,5 +108,5 @@ public interface UserMapper {
      */
     int updateByPrimaryKey(User row);
 
-    User selectUserByUserIdAndUserPassword(User user);
+    User selectUserByUserIdAndUserPassword(LoginRequest loginRequest);
 }

@@ -3,7 +3,7 @@
     <Header />
   </header>
   <main>
-    <RouterView/>
+    <RouterView />
   </main>
   <footer v-if="!hideHeaderFooter">
     <Footer />
@@ -12,7 +12,7 @@
 
 <script setup>
 import { RouterView, useRoute, } from "vue-router";
-import {computed}from 'vue';
+import { computed } from 'vue';
 import Footer from "./components/Footer.vue";
 import Header from "./components/Header.vue";
 

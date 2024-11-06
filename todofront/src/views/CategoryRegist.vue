@@ -113,4 +113,10 @@ const addCategory= async()=>{
   })
 };
 
+const router = useRouter();
+
+const goBack = () => {
+    router.go(-1);
+};
+
 </script>
