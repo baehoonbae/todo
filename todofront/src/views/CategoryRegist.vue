@@ -72,7 +72,7 @@
           </div>
           <!-- Color Selection -->
           <div class="flex items-center justify-between py-2 border-b-[1px]">
-            <label class="text-sm text-gray-700">색상</label>
+            <span class="text-sm text-gray-700">색상</span>
             <button class="flex items-center space-x-2">
               <div class="w-5 h-5 bg-black rounded-full"></div>
               <svg
