@@ -17,7 +17,7 @@ public class JwtUtil {
     @Value("${jwt.secret}")  // application.properties에 설정
     private String secretKey;
     
-    private final long expiredMs = 1000 * 60 * 60; // 1시간
+    private final long expiredMs = 1000 * 60 * 30; // 1시간
     
     public String createToken(String userId) {
         Claims claims = Jwts.claims();

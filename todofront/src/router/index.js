@@ -10,10 +10,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path:'/',
-      name:'home',
+      path: '/',
+      name: 'home',
       component: TodoHome,
-      meta:{hideHeaderFooter:true},
+      meta: { hideHeaderFooter: true },
     },
     {
       path: '/calendar',
@@ -26,24 +26,41 @@ const router = createRouter({
       component: TodoBigCalendar
     },
     {
-      path:'/category',
-      name:'category',
+      path: '/category',
+      name: 'category',
       component: CategoryRegist,
-      meta:{hideHeaderFooter:true},
+      meta: { hideHeaderFooter: true },
     },
     {
-      path:'/login',
-      name:'login',
+      path: '/login',
+      name: 'login',
       component: UserLogin,
-      meta:{hideHeaderFooter:true},
+      meta: { hideHeaderFooter: true },
     },
     {
-      path:'/signup',
-      name:'signup',
+      path: '/signup',
+      name: 'signup',
       component: UserSignUp,
-      meta:{hideHeaderFooter:true},
+      meta: { hideHeaderFooter: true },
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  if (token) {  // 로그인된 상태라면
+    if (to.name === 'home') {
+      next({ name: 'calendar' }); // TodoCalendar 컴포넌트로 이동
+    } else {
+      next();
+    }
+  } else {  // 로그인되지 않았다면
+    if (to.name !== 'login' && to.name !== 'signup') {
+      next({ name: 'home' }); // TodoHome 컴포넌트로 이동
+    } else {
+      next();
+    }
+  }
 })
 
 export default router

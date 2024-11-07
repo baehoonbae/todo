@@ -7,13 +7,13 @@
     </div>
     <!-- User Info Section -->
     <div class="flex gap-4">
-      <RouterLink v-if="isCalendarOpen" to="/">
+      <RouterLink v-if="isCalendarOpen" to="/calendar">
         <CalendarDaysIcon
           @click="isCalendarOpen = !isCalendarOpen"
           class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
         />
       </RouterLink>
-      <RouterLink v-else to="/calendar">
+      <RouterLink v-else to="/big-calendar">
         <CalendarDaysIcon
           @click="isCalendarOpen = !isCalendarOpen"
           class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
@@ -41,18 +41,18 @@
             <div class="h-[1px] bg-gray-200"></div>
             <RouterLink
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              to=""
+              to="#"
               >카테고리 관리</RouterLink
             >
             <div class="h-[1px] bg-gray-200"></div>
             <RouterLink
-              href="#"
+              to="#"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >루틴 관리</RouterLink
             >
             <div class="h-[1px] bg-gray-200"></div>
             <RouterLink
-              href="#"
+              to="#"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >시간 알림</RouterLink
             >
@@ -73,10 +73,6 @@ import { RouterLink } from "vue-router";
 
 const isDropdownOpen = ref(false);
 const isCalendarOpen = ref(false);
-
-const toggleCalendar = () => {
-  isCalendarOpen.value = !isCalendarOpen.value;
-};
 
 // 드롭다운 외부 클릭 감지를 위한 이벤트 리스너
 const handleClickOutside = (event) => {
