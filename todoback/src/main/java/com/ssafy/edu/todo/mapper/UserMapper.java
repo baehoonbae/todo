@@ -108,5 +108,5 @@ public interface UserMapper {
      */
     int updateByPrimaryKey(User row);
 
-    User selectUserByUserIdAndUserPassword(LoginRequest loginRequest);
+    User selectUserByUserId(String userId);
 }
