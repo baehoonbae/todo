@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.edu.todo.model.Todo;
 import com.ssafy.edu.todo.service.TodoService;
 
-// 모두 가져오기, 하나만 가져오기, 등록, 수정, 삭제, 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/todo")
 public class TodoController {
     private final TodoService todoService;

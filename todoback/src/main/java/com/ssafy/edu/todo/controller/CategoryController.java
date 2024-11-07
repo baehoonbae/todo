@@ -21,7 +21,6 @@ import com.ssafy.edu.todo.requests.CategoryRequest;
 import com.ssafy.edu.todo.service.CategoryService;
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/category")
 public class CategoryController {
     private final CategoryService cs;

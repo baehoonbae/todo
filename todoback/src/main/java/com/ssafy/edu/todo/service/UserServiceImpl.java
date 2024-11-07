@@ -50,4 +50,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.insertSelective(user) > 0;
     }
 
+    @Override
+    public Optional<User> selectUserByUserName(String userName) {
+        return Optional.ofNullable(userMapper.selectUserByUserName(userName));
+    }
+
+    @Override
+    public Optional<User> selectUserByUserId(String userId) {
+        return Optional.ofNullable(userMapper.selectUserByUserId(userId));
+    }
+
 }

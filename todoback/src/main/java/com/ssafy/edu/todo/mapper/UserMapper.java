@@ -8,7 +8,6 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.ssafy.edu.todo.model.User;
 import com.ssafy.edu.todo.model.UserExample;
-import com.ssafy.edu.todo.requests.LoginRequest;
 
 @Mapper
 public interface UserMapper {
@@ -109,4 +108,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User row);
 
     User selectUserByUserId(String userId);
+
+    User selectUserByUserName(String userName);
 }

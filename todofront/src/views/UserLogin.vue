@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex flex-col">
+    <div class="h-screen flex flex-col" @keydown.enter="login">
         <div class="w-[950px] px-4 mx-auto mt-0">
             <div class="flex items-center mb-8 pt-4">
                 <button class="p-2" @click="goBack">
@@ -25,8 +25,7 @@
                 </div>
             </div>
             <div class="mt-8">
-                <button
-                    @click="login"
+                <button @click="login"
                     class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold hover:bg-gray-800">
                     확인
                 </button>
@@ -42,7 +41,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
 
 const loginData = ref({
@@ -50,12 +49,22 @@ const loginData = ref({
     userPassword: '',
 });
 
+const isUserIdEmpty = computed(() => loginData.value.userId.trim() === '');
+const isUserPasswordEmpty = computed(() => loginData.value.userPassword.trim() === '');
+
 const login = async () => {
+    if (isUserIdEmpty.value) {
+        alert('아이디를 입력하세요.');
+        return;
+    } else if (isUserPasswordEmpty.value) {
+        alert('비밀번호를 입력하세요.');
+        return;
+    }
     await axios
         .post('http://localhost:8097/todo/api/user/login', loginData.value)
         .then(({ data }) => {
-            const token=data.token;
-            if(token){
+            const token = data.token;
+            if (token) {
                 localStorage.setItem('token', token);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             }
