@@ -1,0 +1,198 @@
+body {
+    /* cursor: none; */
+    overflow: hidden;
+    font-family: 'Noto Sans Mono', sans-serif;
+    gap: 40px;
+}
+
+.header-container{
+    min-height: 100px;
+}
+
+.main-container1 {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 달력 스타일 */
+.calendar {
+    min-width: 350px;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header-left{
+    display: flex;
+    gap: 15px;
+}
+
+.month-year {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.calendar-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.weekday {
+    padding: 5px;
+}
+
+.weekend {
+    color: #ff0000;
+}
+
+.saturday {
+    color: #4A90E2;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    position: relative;
+}
+
+.current-day {
+    background-color: #333;
+    color: white;
+    border-radius: 50%;
+}
+
+.day-marker {
+    position: absolute;
+    bottom: 2px;
+    font-size: 10px;
+}
+
+/* 카테고리 리스트 스타일 */
+.category-list {
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+}
+
+.category-header {
+    background-color: #f1f1f1;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.lock-icon {
+    color: #666;
+    font-size: 12px;
+}
+
+.add-button {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0 4px;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-left: 20px;
+}
+
+.profile-circle {
+    width: 24px;
+    height: 24px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.menu-dots {
+    margin-left: auto;
+    color: #666;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.category-1 {
+    color: #4A90E2;
+}
+
+.category-2 {
+    color: #50E3C2;
+}
+
+.category-3 {
+    color: #B8E986;
+}
+
+/* 마우스 효과 그리는 캔버스 스타일 */
+#canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    pointer-events: none;
+}
