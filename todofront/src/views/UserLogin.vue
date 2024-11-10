@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex flex-col" @keydown.enter="login">
+    <div class="h-screen flex flex-col">
         <div class="w-[950px] px-4 mx-auto mt-0">
             <div class="flex items-center mb-8 pt-4">
                 <button class="p-2" @click="goBack">
@@ -12,26 +12,58 @@
                 <div class="w-10"></div>
             </div>
 
-            <div class="space-y-2">
+            <form @submit.prevent="login" class="space-y-2">
                 <div>
-                    <input type="text" placeholder="아이디"
+                    <input 
+                        type="text" 
+                        placeholder="아이디"
+                        v-model="loginData.userId"
+                        :disabled="isLoading"
                         class="w-full px-4 py-3 font-semibold rounded-lg focus:outline-none bg-[#F2F2F2]"
-                        v-model="loginData.userId" />
+                    />
                 </div>
-                <div>
-                    <input type="password" placeholder="비밀번호"
+                <div class="relative">
+                    <input 
+                        :type="showPassword ? 'text' : 'password'" 
+                        placeholder="비밀번호"
+                        v-model="loginData.userPassword"
+                        :disabled="isLoading"
                         class="w-full px-4 py-3 font-semibold rounded-lg focus:outline-none bg-[#F2F2F2]"
-                        v-model="loginData.userPassword" />
+                    />
+                    <button 
+                        type="button"
+                        @click="showPassword = !showPassword"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                    >
+                        <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                    </button>
                 </div>
-            </div>
-            <div class="mt-8">
-                <button @click="login"
-                    class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold hover:bg-gray-800">
-                    확인
+
+                <div v-if="errorMessage" class="text-red-500 text-sm mt-2">
+                    {{ errorMessage }}
+                </div>
+
+                <div class="mt-8">
+                    <button 
+                        type="submit"
+                        :disabled="isLoading || !isFormValid"
+                        class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold 
+                               hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    >
+                        {{ isLoading ? '로딩중...' : '확인' }}
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 flex justify-center space-x-4">
+                <button 
+                    class="text-sm text-gray-400 hover:text-gray-600" 
+                    @click="router.push('/signup')"
+                >
+                    회원가입
                 </button>
-            </div>
-            <div class="mt-8 flex justify-center">
-                <button class="border-b-black border-b-[1.5px] text-sm text-gray-400" @click="">
+                <span class="text-gray-300">|</span>
+                <button class="text-sm text-gray-400 hover:text-gray-600">
                     비밀번호를 잊으셨나요?
                 </button>
             </div>
@@ -44,51 +76,74 @@ import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
 import axios from 'axios';
 
+const router = useRouter();
+const isLoading = ref(false);
+const showPassword = ref(false);
+const errorMessage = ref('');
+
 const loginData = ref({
     userId: '',
     userPassword: '',
 });
 
-const isUserIdEmpty = computed(() => loginData.value.userId.trim() === '');
-const isUserPasswordEmpty = computed(() => loginData.value.userPassword.trim() === '');
+const isFormValid = computed(() => {
+    return loginData.value.userId.trim() !== '' && 
+           loginData.value.userPassword.trim() !== '';
+});
 
 const login = async () => {
-    if (isUserIdEmpty.value) {
-        alert('아이디를 입력하세요.');
-        return;
-    } else if (isUserPasswordEmpty.value) {
-        alert('비밀번호를 입력하세요.');
-        return;
-    }
-    await axios
-        .post('http://localhost:8097/todo/api/user/login', loginData.value)
-        .then(({ data }) => {
-            const token = data.token;
-            if (token) {
-                localStorage.setItem('token', token);
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            }
-            alert('로그인이 완료되었습니다.');
+    if (!isFormValid.value || isLoading.value) return;
+    
+    errorMessage.value = '';
+    isLoading.value = true;
+    
+    try {
+        const response = await axios.post('http://localhost:8097/todo/api/user/login', loginData.value);
+        const data = response.data;
+        
+        if (data.accessToken && data.refreshToken) {
+            // 토큰 저장
+            sessionStorage.setItem('accessToken', data.accessToken);
+            sessionStorage.setItem('userId', data.userId);
+            
+            // axios 기본 헤더 설정
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
+            
             router.push('/');
-        })
-        .catch((err) => {
-            console.log(err.response.data);
-            alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-        })
-        .finally(() => {
-            console.log('로그인 폼을 비웁니다!');
-            loginData.value = {
-                userId: '',
-                userPassword: '',
-            };
-        });
-}
-
-const router = useRouter();
+        } else {
+            errorMessage.value = '로그인 응답에 토큰이 없습니다.';
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        if (error.response) {
+            if (error.response.status === 401) {
+                errorMessage.value = '아이디 또는 비밀번호가 올바르지 않습니다.';
+            } else {
+                errorMessage.value = error.response.data.message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            }
+        } else if (error.request) {
+            errorMessage.value = '서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+        } else {
+            errorMessage.value = '로그인 처리 중 오류가 발생했습니다.';
+        }
+    } finally {
+        isLoading.value = false;
+    }
+};
 
 const goBack = () => {
     router.go(-1);
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

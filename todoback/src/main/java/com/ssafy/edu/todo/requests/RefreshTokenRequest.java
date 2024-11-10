@@ -1,13 +1,14 @@
 package com.ssafy.edu.todo.requests;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
-    private String userId;
-    private String userPassword;
-}
+public class RefreshTokenRequest {
+    private String refreshToken;
+} 

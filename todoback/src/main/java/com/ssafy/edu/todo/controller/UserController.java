@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.edu.todo.exception.InvalidTokenException;
 import com.ssafy.edu.todo.model.User;
 import com.ssafy.edu.todo.requests.LoginRequest;
+import com.ssafy.edu.todo.requests.RefreshTokenRequest;
 import com.ssafy.edu.todo.responses.LoginResponse;
+import com.ssafy.edu.todo.responses.TokenResponse;
+import com.ssafy.edu.todo.service.TokenService;
 import com.ssafy.edu.todo.service.UserService;
 import com.ssafy.edu.todo.util.JwtUtil;
 
@@ -26,11 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
     private final UserService userService;
+    private final TokenService tokenService;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserController(UserService userService, JwtUtil jwtUtil) {
+    public UserController(UserService userService, TokenService tokenService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.tokenService = tokenService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -55,22 +62,59 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // log.debug("로그인 시작");
         try {
             Optional<User> opUser = userService.login(loginRequest);
             return opUser
                     .map(user -> {
-                        String token = jwtUtil.createToken(user.getUserId());
-                        return ResponseEntity.ok(new LoginResponse(token, user.getUserId(), "로그인 성공"));
+                        TokenResponse tokens = tokenService.createTokens(user.getUserId());
+                        return ResponseEntity.ok(new LoginResponse(
+                            tokens.getAccessToken(),
+                            tokens.getRefreshToken(),
+                            user.getUserId(),
+                            "로그인 성공!"                        
+                        ));
                     })
                     .orElse(ResponseEntity
                             .status(HttpStatus.UNAUTHORIZED)
-                            .body(new LoginResponse(null, null, "아이디 또는 비밀번호가 잘못되었습니다.")));
+                            .body(new LoginResponse(null, null, null, "로그인 실패")));
         } catch (Exception e) {
-            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new LoginResponse(null, null, null, "서버 오류"));
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        try {
+            if (request.getRefreshToken() == null || request.getRefreshToken().isEmpty()) {
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("리프레시 토큰이 필요합니다.");
+            }
+
+            TokenResponse tokens = tokenService.refreshAccessToken(request.getRefreshToken());
+            return ResponseEntity.ok(tokens);
+        } catch (InvalidTokenException e) {
             return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new LoginResponse(null, null, "서버 오류 발생"));
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("토큰 갱신 중 오류가 발생했습니다.");
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) {
+        try {
+            String token = bearerToken.substring(7); // "Bearer " 제거
+            String userId = jwtUtil.getUserId(token);
+            tokenService.revokeRefreshToken(userId);
+            return ResponseEntity.ok().body("로그아웃 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("로그아웃 실패");
         }
     }
 

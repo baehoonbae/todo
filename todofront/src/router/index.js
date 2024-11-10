@@ -47,16 +47,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
-  if (token) {  // 로그인된 상태라면
-    if (to.name === 'home') {
-      next({ name: 'calendar' }); // TodoCalendar 컴포넌트로 이동
-    } else {
+  const token = sessionStorage.getItem('token');
+  if (!token) {  // 토큰이 없다면
+    if (to.name === 'login' || to.name === 'signup' || to.name === 'home') {
       next();
+    } else {
+      next({ name: 'home' }); // TodoHome으로 리다이렉트
     }
-  } else {  // 로그인되지 않았다면
-    if (to.name !== 'login' && to.name !== 'signup') {
-      next({ name: 'home' }); // TodoHome 컴포넌트로 이동
+  } else {  // 토큰이 있다면
+    if (to.name === 'home') {
+      next({ name: 'calendar' }); // TodoCalendar로 리다이렉트
     } else {
       next();
     }
