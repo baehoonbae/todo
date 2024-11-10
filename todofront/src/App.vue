@@ -25,8 +25,8 @@ const hideFooter = computed(() => route.meta.hideFooter)
 
 // 유저 정보 가져오기
 const fetchUserInfo = async () => {
-  const accessToken = sessionStorage.getItem('accessToken');
   const userId = sessionStorage.getItem('userId');
+  const accessToken = sessionStorage.getItem('accessToken');
   
   if (!accessToken || !userId) {
     console.log('토큰 또는 유저ID가 없습니다');

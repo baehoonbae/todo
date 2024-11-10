@@ -239,6 +239,9 @@
       <if test="userPassword != null">
         user_password = #{userPassword,jdbcType=VARCHAR},
       </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_seq = #{userSeq,jdbcType=INTEGER}
   </update>
@@ -273,11 +276,11 @@
   </select>
 
   <select id="selectUserByUserIdAndUserPassword" parameterType="com.ssafy.edu.todo.requests.LoginRequest" resultMap="BaseResultMap">
-    select user_seq, user_name, user_id, user_password from user where user_id=#{userId} and user_password=#{userPassword}
+    select * from user where user_id=#{userId} and user_password=#{userPassword}
   </select>
 
   <select id="selectUserByUserId" parameterType="String" resultMap="BaseResultMap">
-    select user_seq, user_name, user_id, user_password from user where user_id=#{userId}
+    select * from user where user_id=#{userId}
   </select>
   
   <insert id="insertUser" parameterType="com.ssafy.edu.todo.model.User">
@@ -289,6 +292,6 @@
   </update>
 
   <select id="selectUserByUserName" parameterType="String" resultMap="BaseResultMap">
-    select user_seq, user_name, user_id, user_password from user where user_name=#{userName}
+    select * from user where user_name=#{userName}
   </select>
 </mapper>

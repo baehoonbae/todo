@@ -19,4 +19,5 @@ public class User {
     @NonNull String userName;
     @NonNull String userId;
     @NonNull String userPassword;
+    String description;
 }

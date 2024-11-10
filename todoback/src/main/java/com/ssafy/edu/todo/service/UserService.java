@@ -10,4 +10,5 @@ public interface UserService {
     public boolean join(User user);
     public Optional<User> selectUserByUserName(String userName);
     public Optional<User> selectUserByUserId(String userId);
+    public boolean updateUserInfo(String userId, User user);
 }

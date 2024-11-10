@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -175,6 +176,20 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
         }
+    }   
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUserInfo(@PathVariable String userId, @RequestBody User user) {
+        try {
+            boolean success=userService.updateUserInfo(userId, user);
+            if(success){
+                return ResponseEntity.ok().body("유저 정보 수정 성공");
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유저 정보 수정 실패");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        }
     }
-    
 }

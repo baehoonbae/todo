@@ -29,32 +29,51 @@
                 <div class="space-y-[0.6rem]">
                     <!-- Category Input -->
                     <button
-                        class="flex justify-between items-center  px-6 w-[950px] h-[50px] text-[0.9rem] font-medium p-2 rounded-[20px] bg-[#f6f6f6]">
+                        class="flex justify-between items-center  px-6 w-[950px] h-[50px] text-[0.9rem] font-medium p-2 rounded-[20px] bg-[#f6f6f6]"
+                        @click="showChangeNameModal = true">
                         <span>이름</span>
-                        <span>ㅇㅇ</span>
+                        <span class="font-bold">{{ localUser.userName }}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-4 h-4 inline">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </span>
                     </button>
                     <button
-                        class="flex justify-between items-center  px-6 w-[950px] h-[50px] text-[0.9rem] font-medium p-2 rounded-[20px] bg-[#f6f6f6]">
-                        <span>이름</span>
-                        <span>ㅇㅇ</span>
-                    </button>
-                    <button
-                        class="flex justify-between items-center px-6  w-[950px] h-[50px] text-[0.9rem] font-medium p-2 rounded-[20px] bg-[#f6f6f6]">
-                        <span>이름</span>
-                        <span>ㅇㅇ</span>
+                        class="flex justify-between items-center  px-6 w-[950px] h-[50px] text-[0.9rem] font-medium p-2 rounded-[20px] bg-[#f6f6f6]"
+                        @click="showChangeDescriptionModal = true">
+                        <span>자기소개</span>
+                        <span class="font-bold">{{ localUser.description || '등록안됨' }}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-4 h-4 inline">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </span>
                     </button>
                 </div>
             </div>
         </main>
     </div>
+    <TodoMyChangeName v-if="showChangeNameModal" @close="showChangeNameModal = false" :user="user" />
+    <TodoMyChangeDescription v-if="showChangeDescriptionModal" @close="showChangeDescriptionModal = false" :user="user" />
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref, computed } from 'vue';
+import TodoMyChangeName from '@/components/TodoMyChangeName.vue';
+import TodoMyChangeDescription from '@/components/TodoMyChangeDescription.vue';
+
 const router = useRouter();
 
 const goBack = () => {
     router.go(-1);
 };
+
+const props = defineProps(['user']);
+const localUser = computed(() => ({...props.user}));
+
+const showChangeNameModal = ref(false);
+const showChangeDescriptionModal = ref(false);
 
 </script>

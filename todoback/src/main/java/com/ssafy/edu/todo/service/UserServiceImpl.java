@@ -60,4 +60,9 @@ public class UserServiceImpl implements UserService {
         return Optional.ofNullable(userMapper.selectUserByUserId(userId));
     }
 
+    @Override
+    public boolean updateUserInfo(String userId, User user) {
+        return userMapper.updateByPrimaryKeySelective(user) > 0;
+    }
+
 }
