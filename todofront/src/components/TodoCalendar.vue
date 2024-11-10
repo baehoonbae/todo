@@ -1,21 +1,24 @@
 <template>
-  <div class="container mx-auto px-4 max-w-[950px]">
+  <div class="container mx-auto px-4 max-w-[945px] mt-[53px]">
     <!-- 달력 내용 -->
-    <div class="flex gap-20 mt-12">
+    <div class="flex gap-18">
       <div>
         <div class="mb-4 pl-2 flex items-center">
-          <div class="w-14 h-14 bg-gray-100 rounded-full mr-4"></div>
-          <span class="text-lg font-bold">me</span>
+          <RouterLink class="w-14 h-14 bg-gray-100 rounded-full mr-4"></RouterLink>
+          <RouterLink to="/my" class="flex flex-col">
+            <div class="text-[0.9rem] font-bold">{{ user.userName }}</div>
+            <div class="text-[0.81rem] font-medium text-gray-400">{{ user.description || '프로필에 자기소개를 입력해보세요.' }}</div>
+          </RouterLink>
         </div>
         <!-- Left Calendar Section -->
-        <div class="w-[23.5rem]">
+        <div class="w-[23rem] mt-6">
           <!-- Date and Stats -->
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
-              <span class="text-[0.9rem] pl-3"
+              <span class="text-[0.95rem] font-bold pl-3"
                 >{{ currentYear }}년 {{ currentMonth }}월</span
               >
-              <span class="text-[0.9rem] text-gray-600"> ✓ 0 😊 0 ❤️ 0 </span>
+              <span class="text-[0.95rem] font-semibold text-gray-600"> ✓ 0 😊 0 ❤️ 0 </span>
             </div>
             <div class="flex gap-2">
               <button @click="previousMonth" class="text-gray-400">&lt;</button>
@@ -24,41 +27,41 @@
           </div>
 
           <!-- Calendar -->
-          <div class="mb-8">
+          <div class="mb-7">
             <!-- Weekdays -->
             <div class="grid grid-cols-7 mb-2">
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
               >
                 월
               </div>
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
               >
                 화
               </div>
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
               >
                 수
               </div>
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
               >
                 목
               </div>
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
               >
                 금
               </div>
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center text-blue-500"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-blue-500"
               >
                 토
               </div>
               <div
-                class="text-center text-[0.8rem] w-12 h-8 flex items-center justify-center text-red-500"
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-red-500"
               >
                 일
               </div>
@@ -70,13 +73,13 @@
                 v-for="empty in firstDayOfMonth"
                 :key="'empty-' + empty"
               >
-                <div class="aspect-square w-12 h-12"></div>
+                <div class="aspect-square w-11 h-11"></div>
               </template>
 
               <!-- 1일부터 말일까지 -->
               <template v-for="day in daysInMonth" :key="day">
                 <div
-                  class="aspect-square w-12 h-12 flex items-center justify-center rounded-full text-[0.8rem] cursor-pointer"
+                  class="aspect-square w-11 h-11 flex items-center justify-center rounded-full text-[0.72rem] cursor-pointer"
                   :class="{
                     'hover:bg-gray-50': true,
                     'bg-gray-200': isToday(day),
@@ -91,8 +94,8 @@
         </div>
       </div>
       <!-- Right Categories Section -->
-      <div class="w-40">
-        <div class="space-y-6">
+      <div class="w-36 ml-20">
+        <div class="space-y-5">
           <div
             v-for="(category, index) in [
               '카테고리 1',
@@ -101,11 +104,11 @@
               'dfgdfgdfg',
             ]"
             :key="index"
-            class="flex items-center justify-between bg-gray-100 rounded-[20px] py-2 px-3 cursor-pointer hover:bg-gray-200"
+            class="flex items-center justify-between bg-gray-100 rounded-[18px] py-2 px-3 cursor-pointer hover:bg-gray-200"
           >
             <div class="flex items-center gap-2">
               <span class="text-gray-400">🔒</span>
-              <span class="text-sm text-gray-800 font-bold">{{
+              <span class="text-xs text-gray-800 font-bold">{{
                 category
               }}</span>
             </div>
@@ -165,4 +168,7 @@ const selectDate = (day) => {
   const selectedDate = new Date(currentYear.value, currentMonth.value - 1, day);
   console.log("Selected date:", selectedDate);
 };
+
+defineProps(['user']);
+
 </script>

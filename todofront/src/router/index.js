@@ -5,6 +5,7 @@ import CategoryRegist from '@/views/CategoryRegist.vue';
 import TodoHome from '@/views/TodoHome.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import UserSignUp from '@/views/UserSignUp.vue';
+import TodoMy from '@/views/TodoMy.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,42 +14,48 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: TodoHome,
-      meta: { hideHeaderFooter: true },
+      meta: { hideHeader: true, hideFooter: true },
     },
     {
       path: '/calendar',
       name: 'calendar',
-      component: TodoCalendar
+      component: TodoCalendar,
     },
     {
-      path: '/big-calendar',
+      path: '/big-calendar', 
       name: 'big-calendar',
-      component: TodoBigCalendar
+      component: TodoBigCalendar,
+    },
+    {
+      path: '/my',
+      name: 'my', 
+      component: TodoMy,
+      meta: { hideHeader: true },
     },
     {
       path: '/category',
       name: 'category',
       component: CategoryRegist,
-      meta: { hideHeaderFooter: true },
+      meta: { hideHeader: true, hideFooter: true },
     },
     {
       path: '/login',
       name: 'login',
       component: UserLogin,
-      meta: { hideHeaderFooter: true },
+      meta: { hideHeader: true, hideFooter: true },
     },
     {
       path: '/signup',
       name: 'signup',
-      component: UserSignUp,
-      meta: { hideHeaderFooter: true },
+      component: UserSignUp, 
+      meta: { hideHeader: true, hideFooter: true },
     },
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  const token = sessionStorage.getItem('token');
-  if (!token) {  // 토큰이 없다면
+  const accessToken = sessionStorage.getItem('accessToken');
+  if (!accessToken) {  // 토큰이 없다면
     if (to.name === 'login' || to.name === 'signup' || to.name === 'home') {
       next();
     } else {

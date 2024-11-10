@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex flex-col">
+    <div @keydown.enter="login" class="h-screen flex flex-col">
         <div class="w-[950px] px-4 mx-auto mt-0">
             <div class="flex items-center mb-8 pt-4">
                 <button class="p-2" @click="goBack">
@@ -35,7 +35,8 @@
                         @click="showPassword = !showPassword"
                         class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                     >
-                        <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
+                        <EyeIcon v-if="showPassword" class="w-5 h-5" />
+                        <EyeSlashIcon v-else class="w-5 h-5" />
                     </button>
                 </div>
 
@@ -43,17 +44,17 @@
                     {{ errorMessage }}
                 </div>
 
-                <div class="mt-8">
-                    <button 
-                        type="submit"
-                        :disabled="isLoading || !isFormValid"
-                        class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold 
-                               hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                    >
-                        {{ isLoading ? '로딩중...' : '확인' }}
-                    </button>
-                </div>
             </form>
+            <div class="mt-8"> 
+                <button 
+                    type="submit"
+                    :disabled="isLoading || !isFormValid"
+                    class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold 
+                           hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                    {{ isLoading ? '로딩중...' : '확인' }}
+                </button>
+            </div>
 
             <div class="mt-8 flex justify-center space-x-4">
                 <button 
@@ -75,6 +76,7 @@
 import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
 import axios from 'axios';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
 
 const router = useRouter();
 const isLoading = ref(false);
@@ -98,17 +100,17 @@ const login = async () => {
     isLoading.value = true;
     
     try {
-        const response = await axios.post('http://localhost:8097/todo/api/user/login', loginData.value);
+        const response = await axios.post('http://localhost:8097/todo/api/user/login', 
+            loginData.value,
+            { withCredentials: true }
+        );
         const data = response.data;
         
-        if (data.accessToken && data.refreshToken) {
-            // 토큰 저장
+        if (data.accessToken) {
             sessionStorage.setItem('accessToken', data.accessToken);
-            sessionStorage.setItem('userId', data.userId);
-            
-            // axios 기본 헤더 설정
+            sessionStorage.setItem('userId', loginData.value.userId);
+            sessionStorage.setItem('userName', data.userName);
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
-            
             router.push('/');
         } else {
             errorMessage.value = '로그인 응답에 토큰이 없습니다.';

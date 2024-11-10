@@ -2,8 +2,11 @@ package com.ssafy.edu.todo.controller;
 
 import java.util.Optional;
 
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +27,7 @@ import com.ssafy.edu.todo.service.UserService;
 import com.ssafy.edu.todo.util.JwtUtil;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -67,12 +71,24 @@ public class UserController {
             return opUser
                     .map(user -> {
                         TokenResponse tokens = tokenService.createTokens(user.getUserId());
-                        return ResponseEntity.ok(new LoginResponse(
-                            tokens.getAccessToken(),
-                            tokens.getRefreshToken(),
-                            user.getUserId(),
-                            "로그인 성공!"                        
-                        ));
+
+                        ResponseCookie refreshTokenCookie = ResponseCookie
+                                .from("refreshToken", tokens.getRefreshToken())
+                                .httpOnly(true)         // 자바스크립트 접근 불가
+                                .secure(true)             // https 프로토콜에서만 전송(개발 단계에서는 주석 처리)
+                                .path("/")                  // 모든 경로에서 접근 가능
+                                .maxAge(60 * 60 * 24 * 14)       // 2주
+                                .sameSite("Strict")     // CSRF 방지
+                                .domain("localhost")      // 도메인 설정
+                                .build();
+
+                        return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                                .body(new LoginResponse(
+                                        tokens.getAccessToken(),
+                                        user.getUserId(),
+                                        user.getUserName(),
+                                        "로그인 성공!"));
                     })
                     .orElse(ResponseEntity
                             .status(HttpStatus.UNAUTHORIZED)
@@ -88,20 +104,20 @@ public class UserController {
         try {
             if (request.getRefreshToken() == null || request.getRefreshToken().isEmpty()) {
                 return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("리프레시 토큰이 필요합니다.");
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("리프레시 토큰이 필요합니다.");
             }
 
             TokenResponse tokens = tokenService.refreshAccessToken(request.getRefreshToken());
             return ResponseEntity.ok(tokens);
         } catch (InvalidTokenException e) {
             return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(e.getMessage());
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("토큰 갱신 중 오류가 발생했습니다.");
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("토큰 갱신 중 오류가 발생했습니다.");
         }
     }
 
@@ -148,4 +164,17 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserInfo(@PathVariable String userId) {
+        try{
+            Optional<User> opUser = userService.selectUserByUserId(userId);
+            return opUser
+                    .map(user -> ResponseEntity.ok(user))
+                    .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
+        }
+    }
+    
 }

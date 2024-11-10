@@ -3,6 +3,7 @@ package com.ssafy.edu.todo.service;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.edu.todo.exception.InvalidTokenException;
 import com.ssafy.edu.todo.mapper.RefreshTokenMapper;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TokenServiceImpl implements TokenService {
 
     private final JwtUtil jwtUtil;
