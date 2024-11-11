@@ -23,6 +23,7 @@ import com.ssafy.edu.todo.requests.LoginRequest;
 import com.ssafy.edu.todo.requests.RefreshTokenRequest;
 import com.ssafy.edu.todo.responses.LoginResponse;
 import com.ssafy.edu.todo.responses.TokenResponse;
+import com.ssafy.edu.todo.responses.UserResponse;
 import com.ssafy.edu.todo.service.TokenService;
 import com.ssafy.edu.todo.service.UserService;
 import com.ssafy.edu.todo.util.JwtUtil;
@@ -87,7 +88,7 @@ public class UserController {
                                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                                 .body(new LoginResponse(
                                         tokens.getAccessToken(),
-                                        user.getUserId(),
+                                        user.getUserSeq(),
                                         user.getUserName(),
                                         "로그인 성공!"));
                     })
@@ -165,12 +166,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserInfo(@PathVariable String userId) {
+    @GetMapping("/{userSeq}")
+    public ResponseEntity<?> getUserInfo(@PathVariable Integer userSeq) {
         try {
-            Optional<User> opUser = userService.selectUserByUserId(userId);
+            Optional<User> opUser = userService.selectUserByUserSeq(userSeq);
             return opUser
-                    .map(user -> ResponseEntity.ok(user))
+                    .map(user -> ResponseEntity.ok(new UserResponse(user)))
                     .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,10 +179,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<?> updateUserInfo(@PathVariable String userId, @RequestBody User user) {
+    @PutMapping("/{userSeq}")
+    public ResponseEntity<?> updateUserInfo(@PathVariable Integer userSeq, @RequestBody User user) {
         try {
-            boolean success = userService.updateUserInfo(userId, user);
+            boolean success = userService.updateUserInfo(userSeq, user);
             if (success) {
                 return ResponseEntity.ok().body("유저 정보 수정 성공");
             } else {

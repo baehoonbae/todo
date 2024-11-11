@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class LoginResponse {
     private String accessToken;
-    private String userId;
+    private Integer userSeq;
     private String userName;
     private String message;
 } 

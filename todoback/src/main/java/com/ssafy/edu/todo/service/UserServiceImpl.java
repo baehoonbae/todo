@@ -61,8 +61,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserInfo(String userId, User user) {
+    public boolean updateUserInfo(Integer userSeq, User user) {
         return userMapper.updateByPrimaryKeySelective(user) > 0;
+    }
+
+    @Override
+    public Optional<User> selectUserByUserSeq(Integer userSeq) {
+        return Optional.ofNullable(userMapper.selectByPrimaryKey(userSeq));
     }
 
 }
