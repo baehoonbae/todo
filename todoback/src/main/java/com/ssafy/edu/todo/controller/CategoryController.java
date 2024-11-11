@@ -29,10 +29,11 @@ public class CategoryController {
         this.categoryService = cs;
     }
 
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<?> getCategories(@PathVariable("userId") String userId) {
+    @GetMapping("/list/{userSeq}")
+    public ResponseEntity<?> getCategories(@PathVariable("userSeq") Integer userSeq) {
         try {
-            Optional<List<Category>> categories = categoryService.getAllCategories(userId);
+            System.out.println("userSeq: " + userSeq);
+            Optional<List<Category>> categories = categoryService.getAllCategories(userSeq);
             if (categories.isPresent()) {
                 return new ResponseEntity<>(categories.get(), HttpStatus.OK);
             } else {

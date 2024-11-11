@@ -249,7 +249,10 @@
   </select>
 
   <select id="selectAllCategoriesByUserId" parameterType="String" resultType="com.ssafy.edu.todo.model.Category" >
-    select id, user_seq userSeq, color, title from category where user_id=#{userId}
+    select c.id, c.user_seq userSeq, c.color, c.title 
+    from category c 
+    join user u on c.user_seq = u.user_seq 
+    where u.user_id = #{userId}
   </select>
 
   <update id="updateCategory" parameterType="com.ssafy.edu.todo.model.Category">
