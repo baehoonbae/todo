@@ -14,27 +14,15 @@
 
             <form @submit.prevent="login" class="space-y-2">
                 <div>
-                    <input 
-                        type="text" 
-                        placeholder="아이디"
-                        v-model="loginData.userId"
-                        :disabled="isLoading"
-                        class="w-full px-4 py-3 font-semibold rounded-lg focus:outline-none bg-[#F2F2F2]"
-                    />
+                    <input type="text" placeholder="아이디" v-model="loginData.userId" :disabled="isLoading"
+                        class="w-full px-4 py-3 font-semibold rounded-lg focus:outline-none bg-[#F2F2F2]" />
                 </div>
                 <div class="relative">
-                    <input 
-                        :type="showPassword ? 'text' : 'password'" 
-                        placeholder="비밀번호"
-                        v-model="loginData.userPassword"
-                        :disabled="isLoading"
-                        class="w-full px-4 py-3 font-semibold rounded-lg focus:outline-none bg-[#F2F2F2]"
-                    />
-                    <button 
-                        type="button"
-                        @click="showPassword = !showPassword"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                    >
+                    <input :type="showPassword ? 'text' : 'password'" placeholder="비밀번호"
+                        v-model="loginData.userPassword" :disabled="isLoading"
+                        class="w-full px-4 py-3 font-semibold rounded-lg focus:outline-none bg-[#F2F2F2]" />
+                    <button type="button" @click="showPassword = !showPassword"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
                         <EyeIcon v-if="showPassword" class="w-5 h-5" />
                         <EyeSlashIcon v-else class="w-5 h-5" />
                     </button>
@@ -45,22 +33,15 @@
                 </div>
 
             </form>
-            <div class="mt-8"> 
-                <button 
-                    type="submit"
-                    :disabled="isLoading || !isFormValid"
-                    class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold 
-                           hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
+            <div class="mt-8">
+                <button :disabled="isLoading || !isFormValid" class="w-[75px] mx-auto block bg-black text-sm text-white py-4 rounded-full font-bold 
+                           hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed" @click="login">
                     {{ isLoading ? '로딩중...' : '확인' }}
                 </button>
             </div>
 
             <div class="mt-8 flex justify-center space-x-4">
-                <button 
-                    class="text-sm text-gray-400 hover:text-gray-600" 
-                    @click="router.push('/signup')"
-                >
+                <button class="text-sm text-gray-400 hover:text-gray-600" @click="router.push('/signup')">
                     회원가입
                 </button>
                 <span class="text-gray-300">|</span>
@@ -89,23 +70,23 @@ const loginData = ref({
 });
 
 const isFormValid = computed(() => {
-    return loginData.value.userId.trim() !== '' && 
-           loginData.value.userPassword.trim() !== '';
+    return loginData.value.userId.trim() !== '' &&
+        loginData.value.userPassword.trim() !== '';
 });
 
 const login = async () => {
     if (!isFormValid.value || isLoading.value) return;
-    
+
     errorMessage.value = '';
     isLoading.value = true;
-    
+
     try {
-        const response = await axios.post('http://localhost:8097/todo/api/user/login', 
+        const response = await axios.post('http://localhost:8097/todo/api/user/login',
             loginData.value,
             { withCredentials: true }
         );
         const data = response.data;
-        
+
         if (data.accessToken) {
             sessionStorage.setItem('accessToken', data.accessToken);
             sessionStorage.setItem('userId', loginData.value.userId);

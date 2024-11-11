@@ -3,7 +3,7 @@
     <Header />
   </header>
   <main>
-    <RouterView :user="user"/>
+    <RouterView :user="user" />
   </main>
   <footer v-if="!hideFooter">
     <Footer />
@@ -27,7 +27,7 @@ const hideFooter = computed(() => route.meta.hideFooter)
 const fetchUserInfo = async () => {
   const userId = sessionStorage.getItem('userId');
   const accessToken = sessionStorage.getItem('accessToken');
-  
+
   if (!accessToken || !userId) {
     console.log('토큰 또는 유저ID가 없습니다');
     return;
@@ -39,7 +39,7 @@ const fetchUserInfo = async () => {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    
+
     if (response.data) {
       user.value = response.data;
     } else {

@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.1.5",
     "axios": "^1.7.7",
+    "heroicons": "^2.1.5",
     "pinia": "^2.2.6",
     "todofront": "file:",
     "vue": "^3.5.12",
