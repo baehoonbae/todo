@@ -73,6 +73,29 @@ CREATE TABLE following (
 ALTER TABLE category 
 ADD COLUMN is_public BOOL NOT NULL DEFAULT true;
 
+# user 가 새롭게 생성되면, 카테고리 1,카테고리 2,카테고리 3을 default로 생성함
+DELIMITER //
+CREATE TRIGGER create_default_categories
+AFTER INSERT ON user
+FOR EACH ROW
+BEGIN
+    -- 카테고리1 생성
+    INSERT INTO Category (user_seq, color, title, is_public)
+    VALUES (NEW.user_seq, '#2857aa', '카테고리 1', true);
+    
+    -- 카테고리2 생성
+    INSERT INTO Category (user_seq, color, title, is_public)
+    VALUES (NEW.user_seq, '#191919', '카테고리 2', true);
+    
+    -- 카테고리3 생성
+    INSERT INTO Category (user_seq, color, title, is_public)
+    VALUES (NEW.user_seq, '#785cb4', '카테고리 3', true);
+END//
+
+DELIMITER ;
+
+ALTER TABLE user 
+MODIFY COLUMN description VARCHAR(25) DEFAULT NULL;
 
 
 
