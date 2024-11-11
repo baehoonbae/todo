@@ -28,6 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Optional<List<Category>> getAllCategories(String userId) {
+        List<Category> list = cm.selectAllCategoriesByUserId(userId);
+        return Optional.ofNullable(list);
+    }
+
+    @Override
     public Optional<Category> getCategoryById(int categoryId) {
         return Optional.ofNullable(cm.selectCategoryById(categoryId));
     }

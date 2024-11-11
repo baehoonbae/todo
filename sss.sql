@@ -9,12 +9,6 @@ select * from follower;
 select * from following;
 select * from refresh_tokens;
 
-CREATE TABLE refresh_tokens (
-    user_id VARCHAR(50) PRIMARY KEY,
-    token VARCHAR(500) NOT NULL,
-    expiry_date TIMESTAMP NOT NULL
-);
-
 -- user 테이블 생성
 CREATE TABLE user (
     user_seq INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,6 +23,7 @@ CREATE TABLE Category (
     user_seq INT not null,
     color varchar(255) not null,
     title VARCHAR(255) NOT NULL,
+    is_public bool not null default true,
     FOREIGN KEY (user_seq) REFERENCES user(user_seq) ON DELETE CASCADE
 );
 
@@ -44,6 +39,13 @@ CREATE TABLE Todo (
 # 2024-11-10 추가 쿼리문
 ALTER TABLE user 
 ADD description VARCHAR(500) DEFAULT NULL;
+
+-- refresh_tokens 테이블 생성
+CREATE TABLE refresh_tokens (
+    user_id VARCHAR(50) PRIMARY KEY,
+    token VARCHAR(500) NOT NULL,
+    expiry_date TIMESTAMP NOT NULL
+);
 
 -- Follower 테이블 생성 (나를 팔로우하는 사람들)
 CREATE TABLE follower (
@@ -67,7 +69,9 @@ CREATE TABLE following (
     UNIQUE KEY unique_following (user_seq, following_user_seq)
 );
 
-
+# 11-11 추가 쿼리문
+ALTER TABLE category 
+ADD COLUMN is_public BOOL NOT NULL DEFAULT true;
 
 
 

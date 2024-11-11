@@ -109,6 +109,8 @@ public interface CategoryMapper {
 
     List<Category> selectAllCategoriesByUserSeq(int userSeq);
 
+    List<Category> selectAllCategoriesByUserId(String userId);
+
     int updateCategory(Category category);
 
     Category selectCategoryById(int id);

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,18 +22,18 @@ import com.ssafy.edu.todo.service.CategoryService;
 @RestController
 @RequestMapping("/api/category")
 public class CategoryController {
-    private final CategoryService cs;
+    private final CategoryService categoryService;
 
     @Autowired
     public CategoryController(CategoryService cs) {
-        this.cs = cs;
+        this.categoryService = cs;
     }
 
-    @GetMapping("/list/{userSeq}")
-    public ResponseEntity<?> getCategories(@PathVariable("userSeq") int userSeq) {
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<?> getCategories(@PathVariable("userId") String userId) {
         try {
-            Optional<List<Category>> categories=cs.getAllCategories(userSeq);
-            if(categories.isPresent()){
+            Optional<List<Category>> categories = categoryService.getAllCategories(userId);
+            if (categories.isPresent()) {
                 return new ResponseEntity<>(categories.get(), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("카테고리 조회 실패", HttpStatus.BAD_REQUEST);
@@ -43,15 +42,15 @@ public class CategoryController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }  
+    }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getCategory(@PathVariable("id") int categoryId) {
         try {
-            Optional<Category> category=cs.getCategoryById(categoryId);
-            if(category.isPresent()){
+            Optional<Category> category = categoryService.getCategoryById(categoryId);
+            if (category.isPresent()) {
                 return new ResponseEntity<>(category.get(), HttpStatus.OK);
-            }else{
+            } else {
                 return new ResponseEntity<>("카테고리 조회 실패", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
@@ -63,7 +62,7 @@ public class CategoryController {
     @PostMapping("/add")
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
         try {
-            boolean isSuccess = cs.insertCategory(category);
+            boolean isSuccess = categoryService.insertCategory(category);
             if (isSuccess) {
                 return new ResponseEntity<>(category, HttpStatus.OK);
             } else {
@@ -82,7 +81,7 @@ public class CategoryController {
             category.setId(id);
             category.setTitle(cr.getTitle());
             category.setColor(cr.getColor());
-            boolean isSuccess = cs.updateCategory(category);
+            boolean isSuccess = categoryService.updateCategory(category);
             if (isSuccess) {
                 return new ResponseEntity<>(cr, HttpStatus.OK);
             } else {
@@ -97,7 +96,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable("id") int id) {
         try {
-            boolean isSuccess = cs.deleteCategory(id);
+            boolean isSuccess = categoryService.deleteCategory(id);
             if (isSuccess) {
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {

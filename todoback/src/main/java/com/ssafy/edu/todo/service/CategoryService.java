@@ -5,6 +5,7 @@ import java.util.*;
 
 public interface CategoryService {
     public Optional<List<Category>> getAllCategories(int userSeq);
+    public Optional<List<Category>> getAllCategories(String userId);
     public Optional<Category> getCategoryById(int categoryId);
     public boolean insertCategory(Category category);
     public boolean updateCategory(Category category);

@@ -240,12 +240,16 @@
     </if>
   </select>
 
-  <select id="selectCategoryById" parameterType="int">
+  <select id="selectCategoryById" parameterType="int" resultType="com.ssafy.edu.todo.model.Category">
     select id, user_seq userSeq, color, title from category where id=#{id}
   </select>
 
-  <select id="selectAllCategoriesByUserSeq" parameterType="int">
+  <select id="selectAllCategoriesByUserSeq" parameterType="int" resultType="com.ssafy.edu.todo.model.Category">
     select id, user_seq userSeq, color, title from category where user_seq=#{userSeq}
+  </select>
+
+  <select id="selectAllCategoriesByUserId" parameterType="String" resultType="com.ssafy.edu.todo.model.Category" >
+    select id, user_seq userSeq, color, title from category where user_id=#{userId}
   </select>
 
   <update id="updateCategory" parameterType="com.ssafy.edu.todo.model.Category">

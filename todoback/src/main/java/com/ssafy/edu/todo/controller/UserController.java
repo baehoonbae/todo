@@ -167,24 +167,24 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserInfo(@PathVariable String userId) {
-        try{
+        try {
             Optional<User> opUser = userService.selectUserByUserId(userId);
             return opUser
                     .map(user -> ResponseEntity.ok(user))
                     .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
         }
-    }   
+    }
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUserInfo(@PathVariable String userId, @RequestBody User user) {
         try {
-            boolean success=userService.updateUserInfo(userId, user);
-            if(success){
+            boolean success = userService.updateUserInfo(userId, user);
+            if (success) {
                 return ResponseEntity.ok().body("유저 정보 수정 성공");
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유저 정보 수정 실패");
             }
         } catch (Exception e) {

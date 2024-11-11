@@ -19,4 +19,5 @@ public class Category {
     @NonNull private Integer userSeq;
     @NonNull private String color;
     @NonNull private String title;
+    @NonNull private boolean isPublic;  // 공개 여부 추가
 }
