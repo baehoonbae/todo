@@ -93,6 +93,7 @@ const login = async () => {
             sessionStorage.setItem('userName', data.userName);
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
             router.push('/');
+            window.location.reload();
         } else {
             errorMessage.value = '로그인 응답에 토큰이 없습니다.';
         }

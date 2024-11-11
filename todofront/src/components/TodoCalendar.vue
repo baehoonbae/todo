@@ -15,9 +15,7 @@
           <!-- Date and Stats -->
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
-              <span class="text-[0.95rem] font-bold pl-3"
-                >{{ currentYear }}년 {{ currentMonth }}월</span
-              >
+              <span class="text-[0.95rem] font-bold pl-3">{{ currentYear }}년 {{ currentMonth }}월</span>
               <span class="text-[0.95rem] font-semibold text-gray-600"> ✓ 0 😊 0 ❤️ 0 </span>
             </div>
             <div class="flex gap-2">
@@ -30,49 +28,18 @@
           <div class="mb-7">
             <!-- Weekdays -->
             <div class="grid grid-cols-7 mb-2">
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                월
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                화
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                수
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                목
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                금
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-blue-500"
-              >
-                토
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-red-500"
-              >
-                일
-              </div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">월</div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">화</div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">수</div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">목</div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">금</div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-blue-500">토</div>
+              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-red-500">일</div>
             </div>
             <!-- Days -->
             <div class="grid grid-cols-7 gap-1">
               <!-- 빈 칸들 (월요일부터 시작) -->
-              <template
-                v-for="empty in firstDayOfMonth"
-                :key="'empty-' + empty"
-              >
+              <template v-for="empty in firstDayOfMonth" :key="'empty-' + empty">
                 <div class="aspect-square w-11 h-11"></div>
               </template>
 
@@ -83,9 +50,7 @@
                   :class="{
                     'hover:bg-gray-50': true,
                     'bg-gray-200': isToday(day),
-                  }"
-                  @click="selectDate(day)"
-                >
+                  }" @click="selectDate(day)">
                   {{ day }}
                 </div>
               </template>
@@ -96,16 +61,13 @@
       <!-- Right Categories Section -->
       <div class="w-36 ml-20">
         <div class="space-y-5">
-          <div
-            v-for="(category, index) in [
-              '카테고리 1',
-              '카테고리 2',
-              '카테고리 3',
-              'dfgdfgdfg',
-            ]"
-            :key="index"
-            class="flex items-center justify-between bg-gray-100 rounded-[18px] py-2 px-3 cursor-pointer hover:bg-gray-200"
-          >
+          <div v-for="(category, index) in [
+            '카테고리 1',
+            '카테고리 2',
+            '카테고리 3',
+            'dfgdfgdfg',
+          ]" :key="index"
+            class="flex items-center justify-between bg-gray-100 rounded-[18px] py-2 px-3 cursor-pointer hover:bg-gray-200">
             <div class="flex items-center gap-2">
               <span class="text-gray-400">🔒</span>
               <span class="text-xs text-gray-800 font-bold">{{
@@ -121,12 +83,37 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import axios from 'axios';
 
 // 현재 날짜 상태 관리
 const currentDate = ref(new Date());
 const currentYear = computed(() => currentDate.value.getFullYear());
 const currentMonth = computed(() => currentDate.value.getMonth() + 1);
+const categories = ref([]);
+
+const getCategories = async () => {
+  const userId = sessionStorage.getItem('userId');
+  const accessToken = sessionStorage.getItem('accessToken');
+  try {
+    const response = await axios.get(`http://localhost:8097/todo/api/category/list/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (response.data) {
+      categories.value = response.data;
+    } else {
+      console.log('카테고리 조회 실패:', response.data);
+    }
+  } catch (error) {
+    console.error('카테고리 조회 실패:', error.response?.data || error.message);
+    if (error.response?.status === 401) {
+      console.error('인증 토큰이 만료되었거나 유효하지 않습니다');
+    }
+  }
+}
 
 // 해당 월의 첫 번째 날의 요일 구하기 (0: 일요일, 1: 월요일, ...)
 const firstDayOfMonth = computed(() => {
@@ -170,5 +157,9 @@ const selectDate = (day) => {
 };
 
 defineProps(['user']);
+
+onMounted(() => {
+  getCategories();
+})
 
 </script>
