@@ -38,19 +38,35 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import axios from 'axios';
 const newDescription = ref('');
 const error = ref('');
 const loading = ref(false);
 
+watch(newDescription, (newValue) => {
+    if (newValue.length > 25) {
+        error.value = '자기소개는 25자를 초과할 수 없습니다.';
+    } else {
+        error.value = '';
+    }
+});
+
 const isValid = computed(() => {
-    return newDescription.value && !loading.value && !error.value;
+    return newDescription.value && 
+           !loading.value && 
+           !error.value && 
+           newDescription.value.length <= 25;
 });
 
 const changeDescription = async () => {
     if (!newDescription.value) {
         error.value = '자기소개를 입력해주세요.';
+        return;
+    }
+
+    if (newDescription.value.length > 25) {
+        error.value = '자기소개는 25자를 초과할 수 없습니다.';
         return;
     }
 

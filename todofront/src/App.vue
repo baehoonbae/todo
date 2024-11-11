@@ -25,16 +25,15 @@ const hideFooter = computed(() => route.meta.hideFooter)
 
 // 유저 정보 가져오기
 const fetchUserInfo = async () => {
-  const userId = sessionStorage.getItem('userId');
+  const userSeq = sessionStorage.getItem('userSeq');
   const accessToken = sessionStorage.getItem('accessToken');
 
-  if (!accessToken || !userId) {
-    console.log('토큰 또는 유저ID가 없습니다');
+  if (!accessToken || !userSeq) {
     return;
   }
 
   try {
-    const response = await axios.get(`http://localhost:8097/todo/api/user/${userId}`, {
+    const response = await axios.get(`http://localhost:8097/todo/api/user/${userSeq}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }

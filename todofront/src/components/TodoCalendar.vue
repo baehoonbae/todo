@@ -58,26 +58,11 @@
           </div>
         </div>
       </div>
-      <!-- Right Categories Section -->
-      <div class="w-36 ml-20">
-        <div class="space-y-5">
-          <div v-for="(category, index) in [
-            '카테고리 1',
-            '카테고리 2',
-            '카테고리 3',
-            'dfgdfgdfg',
-          ]" :key="index"
-            class="flex items-center justify-between bg-gray-100 rounded-[18px] py-2 px-3 cursor-pointer hover:bg-gray-200">
-            <div class="flex items-center gap-2">
-              <span class="text-gray-400">🔒</span>
-              <span class="text-xs text-gray-800 font-bold">{{
-                category
-              }}</span>
-            </div>
-            <span class="text-gray-400">+</span>
-          </div>
-        </div>
-      </div>
+      <!-- 카테고리 리스트 컴포넌트 -->
+      <TodoCategoryList
+        :categories="categories"
+        @select-category="selectCategory"
+      />
     </div>
   </div>
 </template>
@@ -85,6 +70,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import axios from 'axios';
+import TodoCategoryList from "./TodoCategoryList.vue";
 
 // 현재 날짜 상태 관리
 const currentDate = ref(new Date());
@@ -93,15 +79,14 @@ const currentMonth = computed(() => currentDate.value.getMonth() + 1);
 const categories = ref([]);
 
 const getCategories = async () => {
-  const userId = sessionStorage.getItem('userId');
+  const userSeq = sessionStorage.getItem('userSeq');
   const accessToken = sessionStorage.getItem('accessToken');
   try {
-    const response = await axios.get(`http://localhost:8097/todo/api/category/list/${userId}`, {
+    const response = await axios.get(`http://localhost:8097/todo/api/category/list/${userSeq}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     });
-
     if (response.data) {
       categories.value = response.data;
     } else {
@@ -154,6 +139,12 @@ const nextMonth = () => {
 const selectDate = (day) => {
   const selectedDate = new Date(currentYear.value, currentMonth.value - 1, day);
   console.log("Selected date:", selectedDate);
+};
+
+// 카테고리 선택
+const selectCategory = (category) => {
+  // 카테고리 선택 시 할 일 목록 추가 창 밑에 생김
+
 };
 
 defineProps(['user']);
