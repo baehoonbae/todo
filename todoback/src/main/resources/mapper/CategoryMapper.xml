@@ -245,7 +245,13 @@
     </select>
 
     <select id="selectCategoryById" parameterType="int" resultType="com.ssafy.edu.todo.model.Category">
-        select * from category where id=#{id}
+        select 
+        id,
+        user_seq as userSeq,
+        color,
+        title,
+        is_public as isPublic
+        from category where id=#{id}
     </select>
 
     <select id="selectAllCategoriesByUserSeq" parameterType="int" resultType="com.ssafy.edu.todo.model.Category">
@@ -267,6 +273,12 @@
     </select>
 
     <update id="updateCategory" parameterType="com.ssafy.edu.todo.model.Category">
-        update category set title=#{title}, color=#{color} where id=#{id}
+        update category set 
+        title=#{title}, color=#{color}, is_public=#{isPublic} where id=#{id}
     </update>
+
+    <!-- deleteCategory --> 
+    <delete id="deleteCategory" parameterType="int">
+        delete from category where id=#{id}
+    </delete>
 </mapper>
