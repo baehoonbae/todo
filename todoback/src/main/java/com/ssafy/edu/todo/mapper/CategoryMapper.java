@@ -114,4 +114,6 @@ public interface CategoryMapper {
     int updateCategory(Category category);
 
     Category selectCategoryById(int id);
+
+    int deleteCategory(int id);
 }

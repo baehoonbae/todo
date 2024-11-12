@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.edu.todo.model.Category;
-import com.ssafy.edu.todo.requests.CategoryRequest;
 import com.ssafy.edu.todo.service.CategoryService;
 
 @RestController
@@ -77,16 +76,11 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable("id") int id, @RequestBody CategoryRequest request) {
+    public ResponseEntity<?> updateCategory(@PathVariable("id") int id, @RequestBody Category category) {
         try {
-            Category category = new Category();
-            category.setId(id);
-            category.setTitle(request.getTitle());
-            category.setColor(request.getColor());
-            category.setIsPublic(request.isPublic());
             boolean isSuccess = categoryService.updateCategory(category);
             if (isSuccess) {
-                return new ResponseEntity<>(request, HttpStatus.OK);
+                return new ResponseEntity<>(category, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("카테고리 업데이트 실패", HttpStatus.BAD_REQUEST);
             }
@@ -110,6 +104,5 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
 }

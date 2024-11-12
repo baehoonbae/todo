@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        return categoryMapper.deleteByPrimaryKey(categoryId) > 0;
+        return categoryMapper.deleteCategory(categoryId) > 0;
     }
 
 }
