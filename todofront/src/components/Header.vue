@@ -8,54 +8,31 @@
     <!-- User Info Section -->
     <div class="flex gap-4">
       <RouterLink v-if="isCalendarOpen" to="/calendar">
-        <CalendarDaysIcon
-          @click="isCalendarOpen = !isCalendarOpen"
-          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
-        />
+        <CalendarDaysIcon @click="isCalendarOpen = !isCalendarOpen"
+          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black" />
       </RouterLink>
       <RouterLink v-else to="/big-calendar">
-        <CalendarDaysIcon
-          @click="isCalendarOpen = !isCalendarOpen"
-          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
-        />
+        <CalendarDaysIcon @click="isCalendarOpen = !isCalendarOpen"
+          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black" />
       </RouterLink>
       <div class="relative">
-        <EllipsisHorizontalIcon
-          @click="isDropdownOpen = !isDropdownOpen"
-          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black"
-        />
+        <EllipsisHorizontalIcon @click="isDropdownOpen = !isDropdownOpen"
+          class="w-6 h-6 text-gray-800 cursor-pointer hover:text-black" />
         <Transition name="dropdown">
-          <div
-            v-if="isDropdownOpen"
-            class="absolute right-0 mt-2 w-[155px] font-semibold bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)] py-2 z-50"
-          >
-            <RouterLink
-              class="max-h-10 block px-4 text-sm text-gray-700 hover:bg-gray-100"
-              to="/category"
-            >
+          <div v-if="isDropdownOpen"
+            class="absolute right-0 mt-2 w-[155px] font-semibold bg-white rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)] py-2 z-50">
+            <RouterLink class="max-h-10 block px-4 pb-0.5 text-sm text-gray-700" to="/category">
               <div class="flex justify-between items-center">
                 <span class="text-center">카테고리 등록</span>
                 <span class="text-blue-500 text-2xl">+</span>
               </div>
             </RouterLink>
-            <div class="h-[1px] bg-gray-200"></div>
-            <RouterLink
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              to="/category-list"
-              >카테고리 관리</RouterLink
-            >
-            <div class="h-[1px] bg-gray-200"></div>
-            <RouterLink
-              to="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >루틴 관리</RouterLink
-            >
-            <div class="h-[1px] bg-gray-200"></div>
-            <RouterLink
-              to="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >시간 알림</RouterLink
-            >
+            <div class="h-[1px] bg-gray-100"></div>
+            <RouterLink class="block px-4 py-2 text-sm text-gray-700" to="/category-list">카테고리 관리</RouterLink>
+            <div class="h-[1px] bg-gray-100"></div>
+            <RouterLink to="#" class="block px-4 py-2 text-sm text-gray-700">루틴 관리</RouterLink>
+            <div class="h-[1px] bg-gray-100"></div>
+            <RouterLink to="#" class="block px-4 py-2 text-sm text-gray-700">시간 알림</RouterLink>
           </div>
         </Transition>
       </div>

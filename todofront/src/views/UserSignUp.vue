@@ -2,7 +2,7 @@
     <div class="h-screen flex flex-col" @keydown.enter="signUp">
         <div class="w-[950px] px-4 mx-auto mt-0">
             <div class="flex items-center mb-8 pt-4">
-                <button class="p-2" @click="goBack">
+                <button class="p-2" @click="router.go(-1)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -59,6 +59,8 @@ const user = ref({
     userId: '',
     userPassword: '',
 })
+
+const router = useRouter();
 
 const isUserNameEmpty = computed(() => user.value.userName.trim() === '');
 const isUserIdEmpty = computed(() => user.value.userId.trim() === '');
@@ -149,12 +151,6 @@ const checkDuplicateUserId = async () => {
             console.error(err);
         })
 }
-
-const router = useRouter();
-
-const goBack = () => {
-    router.go(-1);
-};
 </script>
 
 <style scoped></style>

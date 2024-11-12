@@ -4,13 +4,11 @@
     <div class="flex gap-8 overflow-x-hidden">
       <div class="flex-shrink-0">
         <div class="mb-4 pl-2 flex items-center">
-          <RouterLink
-            class="w-14 h-14 bg-gray-100 rounded-full mr-4"
-          ></RouterLink>
+          <RouterLink class="w-14 h-14 bg-gray-100 rounded-full mr-4"></RouterLink>
           <RouterLink to="/my" class="flex flex-col">
-            <div class="text-[0.9rem] font-bold">{{ user.userName }}</div>
+            <div class="text-[0.9rem] font-bold">{{ authStore.user.userName }}</div>
             <div class="text-[0.81rem] font-medium text-gray-400">
-              {{ user.description || "프로필에 자기소개를 입력해보세요." }}
+              {{ authStore.user.description || "프로필에 자기소개를 입력해보세요." }}
             </div>
           </RouterLink>
         </div>
@@ -19,9 +17,7 @@
           <!-- Date and Stats -->
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
-              <span class="text-[0.95rem] font-bold pl-3"
-                >{{ currentYear }}년 {{ currentMonth }}월</span
-              >
+              <span class="text-[0.95rem] font-bold pl-3">{{ currentYear }}년 {{ currentMonth }}월</span>
               <span class="text-[0.95rem] font-semibold text-gray-600">
                 ✓ 0 😊 0 ❤️ 0
               </span>
@@ -35,63 +31,27 @@
           <!-- Calendar -->
           <div class="mb-7">
             <!-- Weekdays -->
-            <div class="grid grid-cols-7 mb-2">
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                월
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                화
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                수
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                목
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
-              >
-                금
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-blue-500"
-              >
-                토
-              </div>
-              <div
-                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-red-500"
-              >
-                일
+            <div class="grid grid-cols-7 mb-2 font-semibold">
+              <div v-for="{ day, color } in weekdays" :key="day"
+                :class="['text-center text-[0.72rem] w-11 h-7 flex items-center justify-center', color]">
+                {{ day }}
               </div>
             </div>
             <!-- Days -->
             <div class="grid grid-cols-7 gap-1">
               <!-- 빈 칸들 (월요일부터 시작) -->
-              <template
-                v-for="empty in firstDayOfMonth"
-                :key="'empty-' + empty"
-              >
+              <template v-for="empty in firstDayOfMonth" :key="'empty-' + empty">
                 <div class="aspect-square w-11 h-11"></div>
               </template>
 
               <!-- 1일부터 말일까지 -->
               <template v-for="day in daysInMonth" :key="day">
                 <div
-                  class="aspect-square w-11 h-11 flex items-center justify-center rounded-full text-[0.72rem] cursor-pointer"
+                  class="aspect-square font-semibold w-11 h-11 flex items-center justify-center rounded-full text-[0.72rem] cursor-pointer"
                   :class="{
                     'hover:bg-gray-50': true,
                     'bg-gray-200': isToday(day),
-                  }"
-                  @click="selectDate(day)"
-                >
+                  }" @click="selectDate(day)">
                   {{ day }}
                 </div>
               </template>
@@ -100,7 +60,8 @@
         </div>
       </div>
       <!-- 오른쪽 카테고리 리스트 컴포넌트 -->
-      <div class="flex-1 overflow-auto">
+      <div
+        class="flex-1 h-[calc(100vh-250px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <TodoCategoryList @select-category="selectCategory" />
       </div>
     </div>
@@ -108,13 +69,32 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import TodoCategoryList from "./TodoCategoryList.vue";
+import { useAuthStore } from "../stores/auth";
+import { useCategoryStore } from "../stores/category";
+
+const authStore = useAuthStore();
+const categoryStore = useCategoryStore();
+
+onMounted(async () => {
+  await authStore.checkAuth();
+  await categoryStore.fetchCategories();
+});
 
 // 현재 날짜 상태 관리
 const currentDate = ref(new Date());
 const currentYear = computed(() => currentDate.value.getFullYear());
 const currentMonth = computed(() => currentDate.value.getMonth() + 1);
+const weekdays = [
+  { day: '월', color: '' },
+  { day: '화', color: '' },
+  { day: '수', color: '' },
+  { day: '목', color: '' },
+  { day: '금', color: '' },
+  { day: '토', color: 'text-blue-500' },
+  { day: '일', color: 'text-red-500' }
+]
 
 // 해당 월의 첫 번째 날의 요일 구하기 (0: 일요일, 1: 월요일, ...)
 const firstDayOfMonth = computed(() => {
@@ -156,11 +136,4 @@ const selectDate = (day) => {
   const selectedDate = new Date(currentYear.value, currentMonth.value - 1, day);
   console.log("Selected date:", selectedDate);
 };
-
-// 카테고리 선택
-const selectCategory = (category) => {
-  // 카테고리 선택 시 할 일 목록 추가 창 밑에 생김
-};
-
-defineProps(["user"]);
 </script>

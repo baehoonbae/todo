@@ -2,7 +2,7 @@
   <div @keydown.enter="login" class="h-screen flex flex-col">
     <div class="w-[950px] px-4 mx-auto mt-0">
       <div class="flex items-center mb-8 pt-4">
-        <button class="p-2" @click="goBack">
+        <button class="p-2" @click="router.go(-1)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -85,12 +85,10 @@ import { useRouter } from "vue-router";
 import { ref, computed } from "vue";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/vue/24/outline";
 import { useAuthStore } from "@/stores/auth";
-
 const router = useRouter();
 const isLoading = ref(false);
 const showPassword = ref(false);
 const errorMessage = ref("");
-
 const store = useAuthStore();
 const loginData = ref({
   userId: "",
@@ -119,10 +117,6 @@ const login = async () => {
   }
 
   isLoading.value = false;
-};
-
-const goBack = () => {
-  router.go(-1);
 };
 </script>
 

@@ -1,14 +1,17 @@
 <template>
-  <header v-if="!hideHeader" >
+  <header v-if="!hideHeader">
     <Header />
   </header>
   <main>
-    <RouterView :user="store.user" />
+    <RouterView />
   </main>
   <footer v-if="!hideFooter">
     <Footer />
   </footer>
 </template>
+
+<style>
+</style>
 
 <script setup>
 import { RouterView, useRoute } from "vue-router";

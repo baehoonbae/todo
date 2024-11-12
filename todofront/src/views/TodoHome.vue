@@ -14,7 +14,8 @@
                     class="w-full py-4 rounded-full text-center text-base font-semibold cursor-pointer transition-all duration-300 ease-in-out bg-black text-white hover:bg-gray-800">
                     회원가입
                 </RouterLink>
-                <RouterLink to="/login" class="text-gray-600 text-base text-semibold text-center hover:text-black underline">
+                <RouterLink to="/login"
+                    class="text-gray-600 text-base text-semibold text-center hover:text-black underline">
                     로그인
                 </RouterLink>
             </div>
