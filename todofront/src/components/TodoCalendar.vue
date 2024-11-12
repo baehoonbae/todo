@@ -1,13 +1,17 @@
 <template>
   <div class="container mx-auto px-4 max-w-[945px] mt-[53px]">
     <!-- 달력 내용 -->
-    <div class="flex gap-18">
-      <div>
+    <div class="flex gap-8 overflow-x-hidden">
+      <div class="flex-shrink-0">
         <div class="mb-4 pl-2 flex items-center">
-          <RouterLink class="w-14 h-14 bg-gray-100 rounded-full mr-4"></RouterLink>
+          <RouterLink
+            class="w-14 h-14 bg-gray-100 rounded-full mr-4"
+          ></RouterLink>
           <RouterLink to="/my" class="flex flex-col">
             <div class="text-[0.9rem] font-bold">{{ user.userName }}</div>
-            <div class="text-[0.81rem] font-medium text-gray-400">{{ user.description || '프로필에 자기소개를 입력해보세요.' }}</div>
+            <div class="text-[0.81rem] font-medium text-gray-400">
+              {{ user.description || "프로필에 자기소개를 입력해보세요." }}
+            </div>
           </RouterLink>
         </div>
         <!-- Left Calendar Section -->
@@ -15,8 +19,12 @@
           <!-- Date and Stats -->
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
-              <span class="text-[0.95rem] font-bold pl-3">{{ currentYear }}년 {{ currentMonth }}월</span>
-              <span class="text-[0.95rem] font-semibold text-gray-600"> ✓ 0 😊 0 ❤️ 0 </span>
+              <span class="text-[0.95rem] font-bold pl-3"
+                >{{ currentYear }}년 {{ currentMonth }}월</span
+              >
+              <span class="text-[0.95rem] font-semibold text-gray-600">
+                ✓ 0 😊 0 ❤️ 0
+              </span>
             </div>
             <div class="flex gap-2">
               <button @click="previousMonth" class="text-gray-400">&lt;</button>
@@ -28,18 +36,49 @@
           <div class="mb-7">
             <!-- Weekdays -->
             <div class="grid grid-cols-7 mb-2">
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">월</div>
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">화</div>
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">수</div>
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">목</div>
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center">금</div>
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-blue-500">토</div>
-              <div class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-red-500">일</div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
+              >
+                월
+              </div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
+              >
+                화
+              </div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
+              >
+                수
+              </div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
+              >
+                목
+              </div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center"
+              >
+                금
+              </div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-blue-500"
+              >
+                토
+              </div>
+              <div
+                class="text-center text-[0.72rem] w-11 h-7 flex items-center justify-center text-red-500"
+              >
+                일
+              </div>
             </div>
             <!-- Days -->
             <div class="grid grid-cols-7 gap-1">
               <!-- 빈 칸들 (월요일부터 시작) -->
-              <template v-for="empty in firstDayOfMonth" :key="'empty-' + empty">
+              <template
+                v-for="empty in firstDayOfMonth"
+                :key="'empty-' + empty"
+              >
                 <div class="aspect-square w-11 h-11"></div>
               </template>
 
@@ -50,7 +89,9 @@
                   :class="{
                     'hover:bg-gray-50': true,
                     'bg-gray-200': isToday(day),
-                  }" @click="selectDate(day)">
+                  }"
+                  @click="selectDate(day)"
+                >
                   {{ day }}
                 </div>
               </template>
@@ -58,47 +99,22 @@
           </div>
         </div>
       </div>
-      <!-- 카테고리 리스트 컴포넌트 -->
-      <TodoCategoryList
-        :categories="categories"
-        @select-category="selectCategory"
-      />
+      <!-- 오른쪽 카테고리 리스트 컴포넌트 -->
+      <div class="flex-1 overflow-auto">
+        <TodoCategoryList @select-category="selectCategory" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import axios from 'axios';
+import { ref, computed } from "vue";
 import TodoCategoryList from "./TodoCategoryList.vue";
 
 // 현재 날짜 상태 관리
 const currentDate = ref(new Date());
 const currentYear = computed(() => currentDate.value.getFullYear());
 const currentMonth = computed(() => currentDate.value.getMonth() + 1);
-const categories = ref([]);
-
-const getCategories = async () => {
-  const userSeq = sessionStorage.getItem('userSeq');
-  const accessToken = sessionStorage.getItem('accessToken');
-  try {
-    const response = await axios.get(`http://localhost:8097/todo/api/category/list/${userSeq}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-    if (response.data) {
-      categories.value = response.data;
-    } else {
-      console.log('카테고리 조회 실패:', response.data);
-    }
-  } catch (error) {
-    console.error('카테고리 조회 실패:', error.response?.data || error.message);
-    if (error.response?.status === 401) {
-      console.error('인증 토큰이 만료되었거나 유효하지 않습니다');
-    }
-  }
-}
 
 // 해당 월의 첫 번째 날의 요일 구하기 (0: 일요일, 1: 월요일, ...)
 const firstDayOfMonth = computed(() => {
@@ -144,13 +160,7 @@ const selectDate = (day) => {
 // 카테고리 선택
 const selectCategory = (category) => {
   // 카테고리 선택 시 할 일 목록 추가 창 밑에 생김
-
 };
 
-defineProps(['user']);
-
-onMounted(() => {
-  getCategories();
-})
-
+defineProps(["user"]);
 </script>

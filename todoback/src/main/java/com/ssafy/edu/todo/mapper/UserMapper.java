@@ -110,4 +110,6 @@ public interface UserMapper {
     User selectUserByUserId(String userId);
 
     User selectUserByUserName(String userName);
+
+    User selectUserByUserSeq(Integer userSeq);
 }

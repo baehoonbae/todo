@@ -1,7 +1,7 @@
 <!-- Bottom Navigation -->
 <template>
   <!-- Bottom Navigation -->
-  <div class="fixed bottom-0 left-0 right-0">
+  <div class="fixed bottom-0 left-0 right-0 bg-white">
     <div class="flex justify-center mb-2 gap-[95px] py-3 max-w-3xl mx-auto">
       <RouterLink to="/" :class="['flex flex-col items-center']" @click="isMyPage = false">
         <svg

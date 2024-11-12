@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between mt-4 mx-auto px-4 max-w-[950px]">
+  <div class="flex justify-between mt-4 mx-auto px-4 max-w-[950px] bg-white">
     <!-- Profile Section -->
     <div class="flex items-center mb-8 gap-4">
       <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
@@ -41,7 +41,7 @@
             <div class="h-[1px] bg-gray-200"></div>
             <RouterLink
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              to="#"
+              to="/category-list"
               >카테고리 관리</RouterLink
             >
             <div class="h-[1px] bg-gray-200"></div>

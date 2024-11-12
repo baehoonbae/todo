@@ -128,14 +128,14 @@ const changeUserName = async () => {
     }
 
     try {
-        const userId = sessionStorage.getItem('userId');
+        const userSeq = sessionStorage.getItem('userSeq');
         const accessToken = sessionStorage.getItem('accessToken');
         loading.value = true;
 
-        await axios.put(`http://localhost:8097/todo/api/user/${userId}`, {
+        await axios.put(`http://localhost:8097/todo/api/user/${userSeq}`, {
             userSeq: props.user.userSeq,
             userName: newUserName.value,
-            userId: userId,
+            userId: props.user.userId,
         }, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`

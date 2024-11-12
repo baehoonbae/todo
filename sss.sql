@@ -33,7 +33,8 @@ CREATE TABLE Todo (
     category_id INT,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     content TEXT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE CASCADE
+    FOREIGN KEY (category_id) REFERENCES Category(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_seq) REFERENCES user(user_seq) ON DELETE CASCADE
 );
 
 # 2024-11-10 추가 쿼리문
@@ -97,5 +98,11 @@ DELIMITER ;
 ALTER TABLE user 
 MODIFY COLUMN description VARCHAR(25) DEFAULT NULL;
 
-
+# 11-12 쿼리 추가문
+-- NOT NULL 제약조건도 필요한 경우
+ALTER TABLE todo 
+ADD COLUMN user_seq INT,
+ADD CONSTRAINT fk_todo_user 
+FOREIGN KEY (user_seq) REFERENCES user(user_seq)
+ON DELETE CASCADE;  -- 사용자가 삭제되면 todo도 삭제
 

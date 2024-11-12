@@ -6,6 +6,7 @@ import TodoHome from '@/views/TodoHome.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import UserSignUp from '@/views/UserSignUp.vue';
 import TodoMy from '@/views/TodoMy.vue';
+import CategoryList from '@/views/CategoryList.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,12 @@ const router = createRouter({
       meta: { hideHeader: true, hideFooter: true },
     },
     {
+      path: '/category-list',
+      name: 'category-list',
+      component: CategoryList,
+      meta: { hideHeader: true, hideFooter: true },
+    },
+    {
       path: '/login',
       name: 'login',
       component: UserLogin,
@@ -53,10 +60,15 @@ const router = createRouter({
   ]
 })
 
+// 인증 필요없는 view 목록
+const notRequiredAuths=[
+  'login','signup','home',
+]
+
 router.beforeEach((to, from, next) => {
   const accessToken = sessionStorage.getItem('accessToken');
   if (!accessToken) {  // 토큰이 없다면
-    if (to.name === 'login' || to.name === 'signup' || to.name === 'home') {
+    if (notRequiredAuths.includes(to.name)) {
       next();
     } else {
       next({ name: 'home' }); // TodoHome으로 리다이렉트

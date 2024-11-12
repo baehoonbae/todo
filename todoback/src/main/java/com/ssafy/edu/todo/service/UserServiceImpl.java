@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> selectUserByUserSeq(Integer userSeq) {
-        return Optional.ofNullable(userMapper.selectByPrimaryKey(userSeq));
+        return Optional.ofNullable(userMapper.selectUserByUserSeq(userSeq));
     }
 
 }

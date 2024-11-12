@@ -62,6 +62,7 @@ public class CategoryController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addCategory(@RequestBody Category category) {
+        System.out.println(category.toString());
         try {
             boolean isSuccess = categoryService.insertCategory(category);
             if (isSuccess) {
@@ -76,15 +77,16 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable("id") int id, @RequestBody CategoryRequest cr) {
+    public ResponseEntity<?> updateCategory(@PathVariable("id") int id, @RequestBody CategoryRequest request) {
         try {
             Category category = new Category();
             category.setId(id);
-            category.setTitle(cr.getTitle());
-            category.setColor(cr.getColor());
+            category.setTitle(request.getTitle());
+            category.setColor(request.getColor());
+            category.setIsPublic(request.isPublic());
             boolean isSuccess = categoryService.updateCategory(category);
             if (isSuccess) {
-                return new ResponseEntity<>(cr, HttpStatus.OK);
+                return new ResponseEntity<>(request, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("카테고리 업데이트 실패", HttpStatus.BAD_REQUEST);
             }

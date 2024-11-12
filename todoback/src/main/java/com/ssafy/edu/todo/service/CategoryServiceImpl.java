@@ -14,43 +14,43 @@ import com.ssafy.edu.todo.model.Category;
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryMapper cm;
+    private final CategoryMapper categoryMapper;
 
     @Autowired
     public CategoryServiceImpl(CategoryMapper cm) {
-        this.cm = cm;
+        this.categoryMapper = cm;
     }
 
     @Override
     public Optional<List<Category>> getAllCategories(int userSeq) {
-        List<Category> list = cm.selectAllCategoriesByUserSeq(userSeq);
+        List<Category> list = categoryMapper.selectAllCategoriesByUserSeq(userSeq);
         return Optional.ofNullable(list);
     }
 
     @Override
     public Optional<List<Category>> getAllCategories(String userId) {
-        List<Category> list = cm.selectAllCategoriesByUserId(userId);
+        List<Category> list = categoryMapper.selectAllCategoriesByUserId(userId);
         return Optional.ofNullable(list);
     }
 
     @Override
     public Optional<Category> getCategoryById(int categoryId) {
-        return Optional.ofNullable(cm.selectCategoryById(categoryId));
+        return Optional.ofNullable(categoryMapper.selectCategoryById(categoryId));
     }
 
     @Override
     public boolean insertCategory(Category category) {
-        return cm.insert(category) > 0;
+        return categoryMapper.insert(category) > 0;
     }
 
     @Override
     public boolean updateCategory(Category category) {
-        return cm.updateCategory(category) > 0;
+        return categoryMapper.updateCategory(category) > 0;
     }
 
     @Override
     public boolean deleteCategory(int categoryId) {
-        return cm.deleteByPrimaryKey(categoryId) > 0;
+        return categoryMapper.deleteByPrimaryKey(categoryId) > 0;
     }
 
 }

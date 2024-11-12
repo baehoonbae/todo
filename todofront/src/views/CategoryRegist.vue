@@ -117,6 +117,7 @@ const selectColor = () => {
 };
 
 const addCategory = async () => {
+  console.log(category.value);
   try {
     const response = await axios.post(
       'http://localhost:8097/todo/api/category/add',
@@ -130,7 +131,7 @@ const addCategory = async () => {
 
     if (response.data) {
       alert('카테고리가 성공적으로 추가되었습니다.');
-      router.push('/');
+      router.go(-1);
     }
   } catch (error) {
     console.error('카테고리 추가 실패:', error.response?.data || error.message);
