@@ -5,8 +5,9 @@ import CategoryRegist from '@/views/CategoryRegist.vue';
 import TodoHome from '@/views/TodoHome.vue';
 import UserLogin from '@/views/UserLogin.vue';
 import UserSignUp from '@/views/UserSignUp.vue';
-import TodoMy from '@/views/TodoMy.vue';
+import TodoMy from '@/views/TodoMy.vue';  
 import CategoryList from '@/views/CategoryList.vue';
+import CategoryUpdate from '@/views/CategoryUpdate.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,12 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: UserSignUp, 
+      meta: { hideHeader: true, hideFooter: true },
+    },
+    {
+      path: '/category/update/:id',
+      name: 'category-update',
+      component: CategoryUpdate,
       meta: { hideHeader: true, hideFooter: true },
     },
   ]
