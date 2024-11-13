@@ -54,8 +54,7 @@
         <TodoMyChangeName v-if="showChangeNameModal" @close="showChangeNameModal = false" :user="user" />
     </Transition>
     <Transition name="fade">
-        <TodoMyChangeDescription v-if="showChangeDescriptionModal" @close="showChangeDescriptionModal = false"
-            :user="user" />
+        <TodoMyChangeDescription v-if="showChangeDescriptionModal" @close="showChangeDescriptionModal = false"/>
     </Transition>
 </template>
 

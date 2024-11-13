@@ -85,8 +85,8 @@
         <!-- 삭제 확인 모달 -->
         <Transition name="modal">
             <div v-if="showDeleteModal"
-                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div class="bg-white rounded-lg p-6 w-80">
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click="showDeleteModal = false">
+                <div class="bg-white rounded-lg p-6 w-80" @click.stop>
                     <p class="text-gray-600 mb-6 text-center">카테고리를 삭제하시겠습니까?</p>
                     <div class="flex justify-center gap-3">
                         <button @click="showDeleteModal = false"
@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, onUnmounted, watch } from 'vue';
 import { ChevronLeftIcon, ChevronDownIcon, GlobeAltIcon, LockClosedIcon } from '@heroicons/vue/24/outline';
 import { useRouter, useRoute } from 'vue-router';
 import { useCategoryStore } from '@/stores/category';
@@ -133,6 +133,24 @@ const selectVisibility = (isPublic) => {
 
 onMounted(async () => {
     await categoryStore.fetchCategory(id);
+});
+
+const handleEscape = (e) => {
+    if (e.key === 'Escape' && showDeleteModal.value) {
+        showDeleteModal.value = false;
+    }
+};
+
+watch(showDeleteModal, (newValue) => {
+    if (newValue) {
+        document.addEventListener('keydown', handleEscape);
+    } else {
+        document.removeEventListener('keydown', handleEscape);
+    }
+});
+
+onUnmounted(() => {
+    document.removeEventListener('keydown', handleEscape);
 });
 </script>
 

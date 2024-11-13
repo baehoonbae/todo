@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto px-4 max-w-[945px] mt-[53px]">
+  <div class="container mx-auto px-4 max-w-[945px] mt-[53px]" @click="handleContainerClick">
     <!-- 달력 내용 -->
     <div class="flex gap-8 overflow-x-hidden">
       <div class="flex-shrink-0">
@@ -62,7 +62,8 @@
       <!-- 오른쪽 카테고리 리스트 컴포넌트 -->
       <div
         class="flex-1 h-[calc(100vh-250px)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <TodoCategoryList @select-category="selectCategory" />
+        <TodoCategoryList 
+          @select-category="selectCategory" />
       </div>
     </div>
   </div>

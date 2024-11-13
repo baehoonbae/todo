@@ -105,3 +105,10 @@ ADD COLUMN user_seq INT,
 ADD CONSTRAINT fk_todo_user 
 FOREIGN KEY (user_seq) REFERENCES user(user_seq)
 ON DELETE CASCADE;  -- 사용자가 삭제되면 todo도 삭제
+
+#11-13 쿼리 추가문
+ALTER TABLE todo
+ADD CONSTRAINT fk_todo_category
+FOREIGN KEY (category_id) 
+REFERENCES category(id)
+ON DELETE CASCADE;

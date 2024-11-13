@@ -12,6 +12,10 @@
             <div class="flex flex-col gap-4 w-full">
                 <RouterLink to="/signup"
                     class="w-full py-4 rounded-full text-center text-base font-semibold cursor-pointer transition-all duration-300 ease-in-out bg-black text-white hover:bg-gray-800">
+                    게스트로 시작
+                </RouterLink>
+                <RouterLink to="/signup"
+                    class="w-full py-4 rounded-full text-center text-base font-semibold cursor-pointer transition-all duration-300 ease-in-out bg-black text-white hover:bg-gray-800">
                     회원가입
                 </RouterLink>
                 <RouterLink to="/login"

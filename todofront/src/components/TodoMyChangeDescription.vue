@@ -1,10 +1,11 @@
 <template>
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl p-6 w-[90%] max-w-[400px]" @keydown.esc="$emit('close')"
-            @keydown.enter="changeDescription">
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" ref="modalRef" tabindex="0"\
+    @click="$emit('close')">
+        <div class="bg-white rounded-2xl p-6 w-[90%] max-w-[400px]" @keydown.enter="changeDescription">
             <!-- 입력 폼 -->
             <div class="mb-6">
                 <input v-model="newDescription" type="text" placeholder="새로운 자기소개를 입력하세요"
+                    @keydown.esc="$emit('close')" 
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black"
                     :class="{ 'border-red-500': error }" />
                 <p v-if="error" class="mt-2 text-sm text-red-500">{{ error }}</p>
@@ -25,19 +26,13 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, } from 'vue';
 import axios from 'axios';
 const newDescription = ref('');
 const error = ref('');
 const loading = ref(false);
-
-watch(newDescription, (newValue) => {
-    if (newValue.length > 25) {
-        error.value = '자기소개는 25자를 초과할 수 없습니다.';
-    } else {
-        error.value = '';
-    }
-});
+const emit = defineEmits(['close', 'update:description']);
+const props = defineProps(['user']);
 
 const isValid = computed(() => {
     return newDescription.value &&
@@ -82,6 +77,11 @@ const changeDescription = async () => {
     }
 };
 
-const emit = defineEmits(['close', 'update:description']);
-const props = defineProps(['user']);
+watch(newDescription, (newValue) => {
+    if (newValue.length > 25) {
+        error.value = '자기소개는 25자를 초과할 수 없습니다.';
+    } else {
+        error.value = '';
+    }
+});
 </script>
