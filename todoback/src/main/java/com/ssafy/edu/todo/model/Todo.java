@@ -16,7 +16,9 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class Todo {
     private Integer id;
-    private Integer categoryId;
+    @NonNull private Integer categoryId;
     @NonNull private String date;
     @NonNull private String content;
+    @NonNull private Integer userSeq;
+    private Boolean isDone;
 }

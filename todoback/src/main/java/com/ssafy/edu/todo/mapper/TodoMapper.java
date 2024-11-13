@@ -106,7 +106,7 @@ public interface TodoMapper {
      */
      int updateByPrimaryKey(Todo row);
      
-     List<Todo> selectTodoByCategoryId(int categoryId);
+     List<Todo> selectTodoByUserSeq(int userSeq);
 
     Todo selectTodoById(int todoId);
     

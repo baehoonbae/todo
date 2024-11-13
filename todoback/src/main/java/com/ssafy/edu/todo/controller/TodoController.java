@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +28,10 @@ public class TodoController {
         this.todoService = ts;
     }
 
-    @GetMapping("/list/{categoryId}")
-    public ResponseEntity<?> getTodos(@PathVariable("categoryId") int categoryId) {
+    @GetMapping("/list/{userSeq}")
+    public ResponseEntity<?> getTodos(@PathVariable("userSeq") int userSeq) {
         try {
-            Optional<List<Todo>> todos = todoService.getAllTodoByCategoryId(categoryId);
+            Optional<List<Todo>> todos = todoService.getAllTodoByUserSeq(userSeq);
             if (todos.isPresent()) {
                 return new ResponseEntity<>(todos.get(), HttpStatus.OK);
             } else {
@@ -74,12 +73,9 @@ public class TodoController {
         }
     }
 
-    @PutMapping("/{id}/content/{content}")
-    public ResponseEntity<?> updateTodo(@PathVariable("id") int id, @PathVariable("content") String content) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTodo(@PathVariable("id") int id, @RequestBody Todo todo) {
         try {
-            Todo todo = new Todo();
-            todo.setId(id);
-            todo.setContent(content);
             boolean isSuccess = todoService.updateTodo(todo);
             if (isSuccess) {
                 return new ResponseEntity<>(todo, HttpStatus.OK);

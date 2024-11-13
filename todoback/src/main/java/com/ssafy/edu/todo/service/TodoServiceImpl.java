@@ -22,8 +22,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Optional<List<Todo>> getAllTodoByCategoryId(int categoryId) {
-        return Optional.ofNullable(todoMapper.selectTodoByCategoryId(categoryId));
+    public Optional<List<Todo>> getAllTodoByUserSeq(int userSeq) {
+        return Optional.ofNullable(todoMapper.selectTodoByUserSeq(userSeq));
     }
 
     @Override
