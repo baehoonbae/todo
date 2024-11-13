@@ -112,3 +112,6 @@ ADD CONSTRAINT fk_todo_category
 FOREIGN KEY (category_id) 
 REFERENCES category(id)
 ON DELETE CASCADE;
+
+ALTER TABLE todo
+ADD COLUMN is_done TINYINT(1) NOT NULL DEFAULT 0 COMMENT '할 일 완료 여부 (0: 미완료, 1: 완료)';
