@@ -30,9 +30,11 @@
             <div class="h-[1px] bg-gray-100"></div>
             <RouterLink class="block px-4 py-2 text-sm text-gray-700" to="/category-list">카테고리 관리</RouterLink>
             <div class="h-[1px] bg-gray-100"></div>
-            <RouterLink to="#" class="block px-4 py-2 text-sm text-gray-700">루틴 관리</RouterLink>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700">루틴 관리</button>
             <div class="h-[1px] bg-gray-100"></div>
-            <RouterLink to="#" class="block px-4 py-2 text-sm text-gray-700">시간 알림</RouterLink>
+            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700">시간 알림</button>
+            <div class="h-[1px] bg-gray-100"></div>
+            <button @click="authStore.logout()" class="block w-full text-left px-4 py-2 text-sm text-gray-700">로그아웃</button>
           </div>
         </Transition>
       </div>
@@ -47,7 +49,9 @@ import {
 } from "@heroicons/vue/24/outline";
 import { onMounted, onUnmounted, ref } from "vue";
 import { RouterLink } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 
+const authStore = useAuthStore();
 const isDropdownOpen = ref(false);
 const isCalendarOpen = ref(false);
 

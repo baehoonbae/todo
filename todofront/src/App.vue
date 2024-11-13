@@ -21,7 +21,7 @@ import Header from "./components/Header.vue";
 import { useAuthStore } from "./stores/auth";
 
 const route = useRoute();
-const store = useAuthStore();
+const authStore = useAuthStore();
 
 const hideHeader = computed(() => route.meta.hideHeader);
 const hideFooter = computed(() => route.meta.hideFooter);
@@ -31,13 +31,13 @@ watch(
   () => sessionStorage.getItem("accessToken"),
   (newToken) => {
     if (newToken) {
-      store.checkAuth(); // store의 checkAuth 메서드 호출
+      authStore.checkAuth(); // store의 checkAuth 메서드 호출
     }
   }
 );
 
 // 컴포넌트 마운트 시 인증 상태 확인
-onMounted(() => {
-  store.checkAuth();
+onMounted(async () => {
+  await authStore.checkAuth();
 });
 </script>
