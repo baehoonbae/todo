@@ -2,13 +2,18 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 export const useAuthStore = defineStore("auth", () => {
+  const router = useRouter();
   const user = ref({
     userSeq: null,
+    userId: null,
     userName: "",
     isAuthenticated: false,
   });
+
+  const getToken = () => sessionStorage.getItem('accessToken');
 
   // 로그인 액션
   const login = async (loginData) => {
@@ -28,6 +33,7 @@ export const useAuthStore = defineStore("auth", () => {
       // 유저 정보 저장
       user.value = {
         userSeq: data.userSeq,
+        userId: data.userId,
         userName: data.userName,
         isAuthenticated: true,
       };
@@ -35,7 +41,6 @@ export const useAuthStore = defineStore("auth", () => {
       // 토큰 설정
       sessionStorage.setItem("accessToken", data.accessToken);
       sessionStorage.setItem("userSeq", data.userSeq);
-      sessionStorage.setItem("userName", data.userName);
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.accessToken}`;
 
       return { success: true };
@@ -64,26 +69,27 @@ export const useAuthStore = defineStore("auth", () => {
   const logout = () => {
     user.value = {
       userSeq: null,
+      userId: null,
       userName: "",
       isAuthenticated: false,
     };
     sessionStorage.clear();
     delete axios.defaults.headers.common["Authorization"];
+    router.push('/');
   };
 
   // 유저 정보 가져오기
   const fetchUserInfo = async () => {
-    const userSeq = sessionStorage.getItem("userSeq");
-    const token = sessionStorage.getItem("accessToken");
-
-    if (!token || !userSeq) return;
+    const accessToken = getToken();
+    const userSeq = sessionStorage.getItem('userSeq');
+    if (!accessToken || !userSeq) return;
 
     try {
       const response = await axios.get(
         `http://localhost:8097/todo/api/user/${userSeq}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -97,18 +103,18 @@ export const useAuthStore = defineStore("auth", () => {
     } catch (error) {
       console.error("유저 정보 조회 실패:", error);
       if (error.response?.status === 401) {
-        logout(); // 인증 실패시 로그아웃
+        logout();
       }
     }
   };
 
   // 인증 상태 체크
   const checkAuth = async () => {
-    const token = sessionStorage.getItem("accessToken");
-    const userSeq = sessionStorage.getItem("userSeq");
+    const accessToken = getToken();
+    const userSeq = sessionStorage.getItem('userSeq');
 
-    if (token && userSeq) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (accessToken && userSeq) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       await fetchUserInfo();
     }
   };
@@ -118,6 +124,7 @@ export const useAuthStore = defineStore("auth", () => {
     login,
     logout,
     checkAuth,
-    fetchUserInfo
+    fetchUserInfo,
+    getToken,
   };
 });
