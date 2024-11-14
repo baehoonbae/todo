@@ -43,10 +43,25 @@ public class TodoController {
         }
     }
 
+    // @GetMapping("/list/{categoryId}")
+    // public ResponseEntity<?> getTodosByCategoryId(@PathVariable("categoryId") int categoryId){
+    //     try{
+    //         Optional<List<Todo>> todos = todoService.getAllTodoByCategoryId(userSeq);
+    //         if (todos.isPresent()) {
+    //             return new ResponseEntity<>(todos.get(), HttpStatus.OK);
+    //         } else {
+    //             return new ResponseEntity<>("할 일 조회 실패", HttpStatus.BAD_REQUEST);
+    //         }
+    //     }catch(Exception e){
+    //         e.printStackTrace();
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
     @GetMapping("/get/{id}")
-    public ResponseEntity<?> getTodo(@PathVariable("id") int categoryId) {
+    public ResponseEntity<?> getTodo(@PathVariable("id") int todoId) {
         try {
-            Optional<Todo> todo = todoService.getTodoById(categoryId);
+            Optional<Todo> todo = todoService.getTodoById(todoId);
             if (todo.isPresent()) {
                 return new ResponseEntity<>(todo.get(), HttpStatus.OK);
             } else {

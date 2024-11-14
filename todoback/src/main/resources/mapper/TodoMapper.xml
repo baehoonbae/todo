@@ -226,7 +226,7 @@
   </select>
 
   <select id="selectTodoById" parameterType="int" resultType="Todo">
-    select id, category_id categoryId, date, content, user_seq userSeq, is_done isDone from todo where user_seq=#{userSeq} and id=#{id}
+    select id, category_id categoryId, date, content, user_seq userSeq, is_done isDone from todo where id=#{id}
   </select>
 
   <update id="updateSelective" parameterType="com.ssafy.edu.todo.model.Todo">
@@ -236,13 +236,13 @@
         category_id=#{categoryId},
       </if>
       <if test="date != null">
-        date=#{date},
+        `date`=#{date},
       </if>
       <if test="content != null">
-        content=#{content}
+        content=#{content},
       </if>
       <if test="isDone != null">
-        is_done=#{isDone}
+        is_done=#{isDone},
       </if>
     </set>
     where id=#{id}

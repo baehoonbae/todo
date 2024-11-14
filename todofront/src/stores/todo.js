@@ -59,7 +59,7 @@ export const useTodoStore = defineStore("todo", () => {
                 todoData, {
                 headers: { Authorization: `Bearer ${accessToken}` }
             });
-            
+
             if (response.data) {
                 await fetchTodos(todoData.categoryId);
                 return { success: true };
@@ -106,7 +106,7 @@ export const useTodoStore = defineStore("todo", () => {
                 }
             });
             if (response.status === 200) {
-                await fetchTodos(categoryId);
+                await fetchTodos(sessionStorage.getItem('userSeq'));
                 return { success: true };
             }
         } catch (error) {

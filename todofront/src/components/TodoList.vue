@@ -10,19 +10,32 @@
                 </svg>
                 <div v-else class="w-[21.5px] h-[21.5px] rounded border bg-[#dadddf] border-gray-300"></div>
             </div>
-            <button @click="goTodoMenu" class="flex">
-                <div class="w-[344px] text-sm text-left">{{ todo.content }}</div>
-                <EllipsisHorizontalIcon class="w-[21.5px] h-[21.5px]"></EllipsisHorizontalIcon>
-            </button>
-        <div/>
-        </div> 
+            <div v-if="contentUpdateMode && todo.id === selectedTodoId">
+                <div class="flex" @click.stop>
+                    <input type="text" placeholder="할 일 입력" class="pb-2 w-[344px] text-sm outline-none caret-blue-500"
+                        v-model="newTodoContent"
+                        :style="{ 'border-bottom': `2px solid ${categoryStore.category.color}` }" />
+                    <EllipsisHorizontalIcon class="w-[21.5px] h-[21.5px]"></EllipsisHorizontalIcon>
+                </div>
+            </div>
+            <div v-else>
+                <button @click="toggleMenu(todo.id)" class="flex">
+                    <div class="w-[344px] text-sm text-left">{{ todo.content }}</div>
+                    <EllipsisHorizontalIcon class="w-[21.5px] h-[21.5px]"></EllipsisHorizontalIcon>
+                </button>
+            </div>
+        </div>
     </div>
+    <TodoMenu v-if="!contentUpdateMode && selectedTodoId !== null" :selectedTodoId="selectedTodoId" @close="closeMenu"
+        @edit="handleContent" @delete="goDelete" />
 </template>
 
 <script setup>
 import { useTodoStore } from "@/stores/todo";
-import { onMounted, watch, } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch, } from "vue";
 import { EllipsisHorizontalIcon } from "@heroicons/vue/24/outline";
+import TodoMenu from "./TodoMenu.vue";
+import { useCategoryStore } from "@/stores/category";
 
 const userSeq = sessionStorage.getItem('userSeq');
 const props = defineProps({
@@ -32,22 +45,79 @@ const props = defineProps({
     }
 });
 
+const categoryStore = useCategoryStore();
 const todoStore = useTodoStore();
+const selectedTodoId = ref(null);
+const contentUpdateMode = ref(false);
+const newTodoContent = ref(null);
+
+const toggleMenu = (id) => {
+    selectedTodoId.value = selectedTodoId.value === id ? null : id;
+};
+
+const goUpdate = async () => {
+    try {
+        if (contentUpdateMode.value) {
+            const todo = todoStore.todos.find(t => t.id === selectedTodoId.value);
+            todo.content = newTodoContent.value;
+            await todoStore.fetchTodoUpdate(todo);
+            contentUpdateMode.value = false;
+            closeMenu();
+        }
+    } catch (error) {
+        console.error('할 일 수정 실패:', error);
+    }
+};
+
+const goDelete = async (id) => {
+    try {
+        await todoStore.fetchTodoDelete(id);
+        closeMenu();
+    } catch (error) {
+        console.error('할 일 삭제 실패:', error);
+    }
+};
+
+const closeMenu = () => {
+    selectedTodoId.value = null;
+};
 
 const handleDone = async (id) => {
     try {
         const todo = todoStore.todos.find(t => t.id === id);
-        await todoStore.fetchTodoUpdate({
-            id: id,
-            isDone: !todo.isDone
-        });
+        todo.isDone = !todo.isDone;
+        await todoStore.fetchTodoUpdate(todo);
     } catch (error) {
-        console.error('할 일 상태 업데이트 실패:', error);
+        console.error('할 일 수정 실패:', error);
     }
 };
 
+const handleContent = async (id) => {
+    const todo = todoStore.todos.find(t => t.id === id);
+    if (todo) {
+        await categoryStore.fetchCategory(todo.categoryId);
+        contentUpdateMode.value = true;
+        newTodoContent.value = todo.content;
+    }
+};
+
+
 onMounted(async () => {
     await todoStore.fetchTodos(userSeq);
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            if (!contentUpdateMode.value) closeMenu();
+            else goUpdate();
+        }
+        if (event.key === 'Enter') {
+            goUpdate();
+        }
+    });
+    window.addEventListener('click', goUpdate);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('click', goUpdate);
 });
 
 watch(() => props.categoryId, async (newCategoryId) => {

@@ -16,8 +16,8 @@
         <div class="mb-8">
           <TodoList :categoryId="category.id" />
           <div v-if="selectedCategory && selectedCategory.id === category.id" class="mt-4 space-y-2 mb-8">
-            <div class="flex items-center gap-2 px-2">
-              <input class="w-[22.5px] h-[22.5px] rounded border bg-[#dadddf] border-gray-300"></input>
+            <div class="flex items-center gap-2 pl-[0.7px]">
+              <input class="w-[21.5px] h-[21.5px] rounded border bg-[#dadddf] border-gray-300"/>
               <input type="text" placeholder="할 일 입력" class="pb-2 w-[344px] text-sm outline-none caret-blue-500"
                 :ref="el => { if (selectedCategory?.id === category.id) todoInput = el }"
                 :style="{ 'border-bottom': `2px solid ${selectedCategory.color}` }" v-model="todo.content" @click.stop
@@ -85,11 +85,14 @@ const truncateText = (text) => {
   return text.length > 20 ? text.slice(0, 20) + '...' : text;
 };
 
-onMounted(() => {
+onMounted(async () => {
   if (authStore.user.isAuthenticated) {
-    categoryStore.fetchCategories();
+    await categoryStore.fetchCategories();
   }
   window.addEventListener('click', closeAddTodo);
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeAddTodo();
+  });
 });
 
 watch(
@@ -103,7 +106,6 @@ watch(
 
 onUnmounted(() => {
   window.removeEventListener('click', closeAddTodo);
+  window.removeEventListener('keydown', closeAddTodo);
 });
-
-
 </script>
