@@ -13,14 +13,16 @@
           </div>
           <span class="text-gray-400 ml-2 flex-shrink-0">+</span>
         </div>
-        <TodoList :categoryId="category.id" />
-        <div v-if="selectedCategory && selectedCategory.id === category.id" class="mt-4 space-y-2">
-          <div class="flex items-center gap-2 px-2">
-            <input class="w-[22.5px] h-[22.5px] rounded border border-gray-300"></input>
-            <input type="text" placeholder="할 일 입력" class="pb-2 w-[344px] text-mg outline-none caret-blue-500"
-              :ref="el => { if (selectedCategory?.id === category.id) todoInput = el }"
-              :style="{ 'border-bottom': `2px solid ${selectedCategory.color}` }" v-model="todo.content" @click.stop
-              @keyup.enter="handleAddTodo(todo)" />
+        <div class="mb-8">
+          <TodoList :categoryId="category.id" />
+          <div v-if="selectedCategory && selectedCategory.id === category.id" class="mt-4 space-y-2 mb-8">
+            <div class="flex items-center gap-2 px-2">
+              <input class="w-[22.5px] h-[22.5px] rounded border bg-[#dadddf] border-gray-300"></input>
+              <input type="text" placeholder="할 일 입력" class="pb-2 w-[344px] text-sm outline-none caret-blue-500"
+                :ref="el => { if (selectedCategory?.id === category.id) todoInput = el }"
+                :style="{ 'border-bottom': `2px solid ${selectedCategory.color}` }" v-model="todo.content" @click.stop
+                @keyup.enter="handleAddTodo(todo)" />
+            </div>
           </div>
         </div>
       </div>
